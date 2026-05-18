@@ -443,6 +443,177 @@
     .cta p { color: var(--text-soft); max-width: 540px; margin: 0 auto 28px; font-size: 17px; }
     .waitlist-lg { margin: 0 auto; max-width: 480px; }
 
+    /* ---------- preview gallery ---------- */
+    .previews {
+      display: flex; flex-direction: column;
+      gap: 28px;
+      margin-top: 36px;
+    }
+    .preview {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .preview-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .preview-title { display: inline-flex; align-items: center; gap: 12px; }
+    .preview-title h4 { font-size: 15px; margin: 0; letter-spacing: -.01em; }
+    .preview-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .preview-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .pp-dev  { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .pp-lead { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .pp-mgr  { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .preview-img-wrap {
+      background: #0c0c14;
+      padding: 14px;
+    }
+    .preview-img-wrap img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--line-soft);
+    }
+    .preview-img-wrap .ph {
+      width: 100%; aspect-ratio: 16 / 10;
+      border-radius: 10px;
+      background:
+        repeating-linear-gradient(45deg, rgba(139,124,255,.04) 0 8px, transparent 8px 16px),
+        linear-gradient(180deg, #14141f, #11111a);
+      border: 1px dashed rgba(139,124,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mute);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* ---------- teams ---------- */
+    .teams { padding: 96px 0 48px; }
+    .teams-head { max-width: 760px; margin-bottom: 36px; }
+    .teams-head .pill { margin-bottom: 16px; }
+    .personas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .persona {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .persona::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .p-dev::before  { background: linear-gradient(90deg, #38bdf8, transparent); }
+    .p-lead::before { background: linear-gradient(90deg, #8b7cff, transparent); }
+    .p-mgr::before  { background: linear-gradient(90deg, #fbbf24, transparent); }
+    .persona:hover { transform: translateY(-2px); border-color: rgba(139,124,255,.35); }
+    .persona-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px;
+    }
+    .persona-icon {
+      width: 42px; height: 42px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .p-dev  .persona-icon { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .p-lead .persona-icon { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .p-mgr  .persona-icon { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .persona-head h3 { font-size: 17px; margin: 0 0 2px; letter-spacing: -.01em; }
+    .persona-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin: 0;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .persona-sub {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin: 4px 0 18px;
+    }
+    .persona-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .persona-list li {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      padding-left: 18px;
+      position: relative;
+    }
+    .persona-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: .65;
+    }
+    .p-dev  .persona-list li::before { background: #38bdf8; }
+    .p-lead .persona-list li::before { background: #8b7cff; }
+    .p-mgr  .persona-list li::before { background: #fbbf24; }
+    .persona-list b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .teams-cta {
+      margin-top: 28px;
+      background: linear-gradient(180deg, rgba(139,124,255,.06), rgba(139,124,255,.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .teams-cta-text h3 { font-size: 15px; margin: 0 0 4px; letter-spacing: -.005em; }
+    .teams-cta-text p { font-size: 13.5px; color: var(--text-soft); margin: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #d6d0ff;
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.25);
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+
     /* ---------- footer ---------- */
     .foot {
       border-top: 1px solid var(--line-soft);
@@ -489,6 +660,9 @@
       .grid { grid-template-columns: 1fr 1fr; }
       .steps { grid-template-columns: 1fr; }
       .limits { grid-template-columns: 1fr; }
+      .personas { grid-template-columns: 1fr; }
+      .teams { padding: 64px 0 24px; }
+      .teams-cta { flex-direction: column; align-items: flex-start; }
       .privacy-inner { padding: 32px 24px; }
       .nav-links a:not(.nav-cta) { display: none; }
     }
@@ -517,6 +691,7 @@
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#how">How it works</a>
+        <a href="#teams">For teams</a>
         <a href="#privacy">Privacy</a>
         <a class="nav-cta" href="#waitlist">Get early access</a>
       </nav>
@@ -666,6 +841,126 @@
           <div class="step-n">03</div>
           <h3>Open the dashboard</h3>
 <pre class="code"><span class="prompt">$</span> open http://localhost:4321</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="teams" class="teams">
+      <div class="teams-head">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          For teams
+        </span>
+        <h2 class="section-title">One trace stream. Three dashboards.</h2>
+        <p class="section-sub">Every developer gets self-coaching. Every tech lead gets team quality. Every manager gets a budget they can defend. Same data, three lenses.</p>
+      </div>
+
+      <div class="personas">
+        <div class="persona p-dev">
+          <div class="persona-head">
+            <div class="persona-icon">◆</div>
+            <div>
+              <h3>For developers</h3>
+              <p class="persona-tag">My Coaching</p>
+            </div>
+          </div>
+          <p class="persona-sub">Spot your own patterns before anyone else does.</p>
+          <ul class="persona-list">
+            <li><b>Rework rate.</b> How often your follow-up prompt says "fix / broken / wrong".</li>
+            <li><b>Cache hit ratio.</b> How much context you're paying to re-send each turn.</li>
+            <li><b>First-prompt success.</b> Tasks closed in one human turn vs many.</li>
+            <li><b>Hour-of-day cost curve.</b> When you spend most — and whether tired hours are expensive hours.</li>
+          </ul>
+        </div>
+
+        <div class="persona p-lead">
+          <div class="persona-head">
+            <div class="persona-icon">◇</div>
+            <div>
+              <h3>For tech leads</h3>
+              <p class="persona-tag">Team Quality</p>
+            </div>
+          </div>
+          <p class="persona-sub">Coach the team with data, not vibes.</p>
+          <ul class="persona-list">
+            <li><b>Anchor coverage.</b> % of work tied to a Jira / Linear / branch vs ad-hoc.</li>
+            <li><b>Top expensive tasks.</b> Postmortem candidates — click to drill in.</li>
+            <li><b>Repeated knowledge gaps.</b> Same question asked by 3 devs = a missing doc.</li>
+            <li><b>Skill &amp; subagent adoption.</b> Who's leveraging parallel agents and code review.</li>
+          </ul>
+        </div>
+
+        <div class="persona p-mgr">
+          <div class="persona-head">
+            <div class="persona-icon">◈</div>
+            <div>
+              <h3>For managers</h3>
+              <p class="persona-tag">Org &amp; Budget</p>
+            </div>
+          </div>
+          <p class="persona-sub">A budget you can defend in front of finance.</p>
+          <ul class="persona-list">
+            <li><b>Cache-saved dollars.</b> Concrete savings caching is already giving you.</li>
+            <li><b>End-of-month forecast.</b> 7-day rolling avg × days remaining.</li>
+            <li><b>Model-mix simulator.</b> "If 30% Opus → Sonnet, save $X." Run before you pull the lever.</li>
+            <li><b>Anomaly alerts.</b> Any dev's daily cost 3σ above baseline — pinged in Slack.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="previews">
+        <div class="preview">
+          <div class="preview-head">
+            <div class="preview-title">
+              <span class="preview-tag">01 · Developer</span>
+              <h4>My AI Coaching</h4>
+            </div>
+            <span class="preview-pill pp-dev">self-coaching</span>
+          </div>
+          <div class="preview-img-wrap">
+            <img src="assets/dev.png" alt="Tracepilot developer dashboard showing rework rate, cache hit, top expensive tasks, hour-of-day spend, correction streaks" loading="lazy" onerror="this.outerHTML='&lt;div class=ph&gt;dev dashboard preview&lt;/div&gt;'" />
+          </div>
+        </div>
+
+        <div class="preview">
+          <div class="preview-head">
+            <div class="preview-title">
+              <span class="preview-tag">02 · Tech lead</span>
+              <h4>Team Quality</h4>
+            </div>
+            <span class="preview-pill pp-lead">team coaching</span>
+          </div>
+          <div class="preview-img-wrap">
+            <img src="assets/lead.png" alt="Tracepilot tech lead dashboard showing anchor coverage, team rework rate, per-dev quality table, repeated knowledge gaps, branch concurrency" loading="lazy" onerror="this.outerHTML='&lt;div class=ph&gt;tech lead dashboard preview&lt;/div&gt;'" />
+          </div>
+        </div>
+
+        <div class="preview">
+          <div class="preview-head">
+            <div class="preview-title">
+              <span class="preview-tag">03 · Manager / owner</span>
+              <h4>Org &amp; Budget</h4>
+            </div>
+            <span class="preview-pill pp-mgr">budget &amp; forecast</span>
+          </div>
+          <div class="preview-img-wrap">
+            <img src="assets/manager.png" alt="Tracepilot manager dashboard showing spend per dev, model mix simulator, spend per Jira ticket, tool subscription justification, anomaly alerts" loading="lazy" onerror="this.outerHTML='&lt;div class=ph&gt;manager dashboard preview&lt;/div&gt;'" />
+          </div>
+        </div>
+      </div>
+
+      <div class="teams-cta">
+        <div class="teams-cta-text">
+          <h3>Shipping first in the team beta</h3>
+          <p>The highest-leverage insights landing in v1.</p>
+        </div>
+        <div class="chips">
+          <span class="chip">Top-N expensive tasks</span>
+          <span class="chip">Rework rate per dev</span>
+          <span class="chip">Cache hit ratio</span>
+          <span class="chip">Anchor coverage %</span>
+          <span class="chip">Cache-saved $</span>
+          <span class="chip">Model-mix simulator</span>
         </div>
       </div>
     </section>
