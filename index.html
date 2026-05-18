@@ -1191,6 +1191,12 @@
 
   <script>
     (function () {
+      // Set this to your form endpoint to enable real submissions.
+      // Formspree: 'https://formspree.io/f/xxxxxxx'
+      // Web3Forms: 'https://api.web3forms.com/submit'  (also set WAITLIST_KEY)
+      var WAITLIST_ENDPOINT = '';
+      var WAITLIST_KEY = '';
+
       var forms = document.querySelectorAll('form.waitlist');
       var toast = document.getElementById('toast');
       var timer;
@@ -1198,16 +1204,57 @@
         toast.textContent = msg;
         toast.classList.add('show');
         clearTimeout(timer);
-        timer = setTimeout(function () { toast.classList.remove('show'); }, 3200);
+        timer = setTimeout(function () { toast.classList.remove('show'); }, 3600);
       }
+
+      function submitToEndpoint(email) {
+        var body;
+        var headers = { 'Accept': 'application/json' };
+        if (WAITLIST_ENDPOINT.indexOf('web3forms') !== -1) {
+          headers['Content-Type'] = 'application/json';
+          body = JSON.stringify({
+            access_key: WAITLIST_KEY,
+            email: email,
+            subject: 'New Tracepilot waitlist signup',
+            from_name: 'Tracepilot waitlist',
+            source: 'tracepilot.in'
+          });
+        } else {
+          headers['Content-Type'] = 'application/json';
+          body = JSON.stringify({
+            email: email,
+            _subject: 'New Tracepilot waitlist signup',
+            source: 'tracepilot.in'
+          });
+        }
+        return fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: headers, body: body });
+      }
+
       forms.forEach(function (form) {
         form.addEventListener('submit', function (e) {
           e.preventDefault();
           var input = form.querySelector('input[type=email]');
+          var btn = form.querySelector('button[type=submit]');
           var email = input.value.trim();
           if (!email) return;
-          input.value = '';
-          showToast("You're on the list. We'll email when the beta opens.");
+          if (!WAITLIST_ENDPOINT) {
+            input.value = '';
+            showToast("You're on the list. We'll email when the beta opens.");
+            return;
+          }
+          if (btn) { btn.disabled = true; btn.style.opacity = '.7'; }
+          submitToEndpoint(email)
+            .then(function (r) {
+              if (!r.ok) throw new Error('bad status ' + r.status);
+              input.value = '';
+              showToast("You're on the list. We'll email when the beta opens.");
+            })
+            .catch(function () {
+              showToast("Couldn't reach our server. Try again in a moment.");
+            })
+            .finally(function () {
+              if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+            });
         });
       });
 
