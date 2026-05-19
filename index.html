@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tracepilot — The local AI tracker for teams.</title>
-  <meta name="description" content="Every prompt, every dollar, every task your whole team spends on AI — across Claude Code, Cursor, ChatGPT, Claude.ai, Perplexity, Gemini. Runs locally. Nothing leaves your machines." />
+  <meta name="description" content="Every prompt, every dollar, every task your whole team spends on AI — across Claude Code, Cursor, ChatGPT, Claude.ai, Perplexity, Gemini. Raw prompts stay on each dev's machine. Team aggregates are end-to-end encrypted." />
   <meta name="theme-color" content="#0a0a0f" />
   <meta property="og:title" content="Tracepilot — The local AI tracker for teams." />
-  <meta property="og:description" content="Team-wide AI visibility. Cost, insights, and the full trace of every task. Runs on your machines. Coming soon." />
+  <meta property="og:description" content="Team-wide AI visibility. Cost, insights, and the full trace of every task. Raw prompts stay on each dev's machine; team aggregates are end-to-end encrypted. Coming soon." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2521,8 +2521,8 @@
         </div>
         <div class="pillar p-local">
           <div class="pillar-icon">◉</div>
-          <div class="pillar-tag">Local-first</div>
-          <h3>Nothing leaves your machines.</h3>
+          <div class="pillar-tag">Privacy by design</div>
+          <h3>Local capture. Encrypted aggregation.</h3>
         </div>
         <div class="pillar p-task">
           <div class="pillar-icon">◆</div>
@@ -2533,13 +2533,13 @@
     </section>
 
     <section id="features" class="features">
-      <h2 class="section-title">How it stays local.</h2>
+      <h2 class="section-title">How your data stays yours.</h2>
 
       <div class="grid">
         <div class="card">
           <div class="card-icon">◇</div>
-          <h3>Local-first</h3>
-          <p>SQLite at <code>~/.tracepilot/</code>. Dashboard at <code>localhost:4321</code>.</p>
+          <h3>Local capture</h3>
+          <p>Daemon reads each tool's local store. Raw prompts stay on the dev's machine.</p>
         </div>
         <div class="card">
           <div class="card-icon">◈</div>
@@ -2555,6 +2555,16 @@
           <div class="card-icon">◑</div>
           <h3>Research, batched</h3>
           <p>Chat tabs stitched into the task they belong to. See cost from question to PR.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◐</div>
+          <h3>E2E-encrypted aggregates</h3>
+          <p>Only the metrics needed for team views leave the machine — encrypted with your admin's key. Server stores ciphertext.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◍</div>
+          <h3>Self-host option</h3>
+          <p>Run the team aggregator in your own VPC. We never see anything. One Docker command.</p>
         </div>
       </div>
     </section>
@@ -2773,10 +2783,10 @@
         <ul class="limits">
           <li><span class="lim-x">×</span> No keystroke logging. Ever.</li>
           <li><span class="lim-x">×</span> No screen capture. Ever.</li>
-          <li><span class="lim-x">×</span> Clipboard text hashed before storage. Raw text never persisted.</li>
-          <li><span class="lim-check">✓</span> Prompts only read from sources you already have locally.</li>
-          <li><span class="lim-check">✓</span> Everything under <code>~/.tracepilot/</code>.</li>
-          <li><span class="lim-check">✓</span> <code>tracepilot uninstall</code> removes it all.</li>
+          <li><span class="lim-x">×</span> Raw prompts never leave a developer's machine.</li>
+          <li><span class="lim-check">✓</span> Team aggregates are end-to-end encrypted — admin holds the key.</li>
+          <li><span class="lim-check">✓</span> Self-host the team aggregator in your own VPC.</li>
+          <li><span class="lim-check">✓</span> <code>tracepilot uninstall</code> wipes the daemon + local store.</li>
         </ul>
       </div>
     </section>
@@ -2946,7 +2956,7 @@
       var HERO_CAPS = [
         { h1: '7 AI tools.',                       sub: 'Different stores. Different bills. <span class="hl">Nobody talks to each other.</span>' },
         { h1: 'Your CFO just asked.',              sub: 'How much went where? Who used what? <span class="hl">You\'re guessing.</span>' },
-        { h1: 'Tracepilot reads them all. Locally.', sub: 'One daemon. SQLite at <code>~/.tracepilot/</code>. <span class="hl">Nothing leaves your machines.</span>' },
+        { h1: 'Tracepilot reads them all. Locally.', sub: 'Raw prompts stay on each dev\'s machine. <span class="hl">Aggregates are end-to-end encrypted</span> for team views.' },
         { h1: 'Your CFO has answers.',             sub: 'Every prompt, every dollar, every task — <span class="hl">for every dev</span>.' }
       ];
 
