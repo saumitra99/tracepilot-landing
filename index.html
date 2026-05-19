@@ -295,6 +295,7 @@
     .b-pplx     { background: rgba(34,211,238,.12);  color: #67e8f9; border-color: rgba(34,211,238,.25); }
     .b-cgpt     { background: rgba(16,185,129,.12);  color: #6ee7b7; border-color: rgba(16,185,129,.25); }
     .b-gem      { background: rgba(96,165,250,.12);  color: #93c5fd; border-color: rgba(96,165,250,.25); }
+    .b-git      { background: rgba(74,222,128,.12);  color: #86efac; border-color: rgba(74,222,128,.25); }
 
     /* ---------- sections ---------- */
     .section-title {
@@ -1832,6 +1833,120 @@
       font-size: 12.5px;
       text-align: right;
     }
+    .task-shipped { color: #86efac; }
+
+    /* --- heat-strip timeline --- */
+    .task-strip {
+      padding: 16px 24px 14px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(255,255,255,.02);
+    }
+    .task-strip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      margin-bottom: 8px;
+    }
+    .strip-bar {
+      display: flex;
+      height: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line-soft);
+      position: relative;
+    }
+    .strip-seg {
+      position: relative;
+      min-width: 12px;
+      cursor: pointer;
+      transition: filter .15s ease, transform .12s ease;
+    }
+    .strip-seg:hover,
+    .strip-seg.is-active {
+      filter: brightness(1.3) saturate(1.15);
+      transform: translateY(-1px) scaleY(1.15);
+    }
+    .strip-seg::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--panel);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease;
+      z-index: 5;
+    }
+    .strip-seg:hover::after,
+    .strip-seg.is-active::after { opacity: 1; }
+
+    .strip-seg[data-tool="gemini"]  { background: linear-gradient(180deg, #60a5fa 0%, #4f46e5 100%); }
+    .strip-seg[data-tool="chatgpt"] { background: linear-gradient(180deg, #10b981 0%, #047857 100%); }
+    .strip-seg[data-tool="cursor"]  { background: linear-gradient(180deg, #c0b6ff 0%, #6d5cff 100%); }
+    .strip-seg[data-tool="bash"]    { background: linear-gradient(180deg, #f0a583 0%, #d97757 100%); }
+    .strip-seg[data-tool="git"]     { background: linear-gradient(180deg, #86efac 0%, #4ade80 100%); }
+
+    .strip-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-mute);
+    }
+
+    /* --- phase headers --- */
+    .phase { border-bottom: 1px solid var(--line-soft); }
+    .phase:last-of-type { border-bottom: 0; }
+    .phase-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,.02);
+      transition: background .2s ease;
+    }
+    .phase-head.is-active { background: rgba(139,124,255,.08); }
+    .phase-bar {
+      width: 3px;
+      height: 16px;
+      border-radius: 2px;
+    }
+    .phase-research .phase-bar { background: linear-gradient(180deg, #60a5fa, #4f46e5); }
+    .phase-build    .phase-bar { background: linear-gradient(180deg, #c0b6ff, #6d5cff); }
+    .phase-ship     .phase-bar { background: linear-gradient(180deg, #86efac, #4ade80); }
+    .phase-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .phase-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin-left: auto;
+    }
+
+    /* --- strip ↔ trace linking --- */
+    .trace { transition: background .15s ease, opacity .15s ease; }
+    .trace.is-dimmed { opacity: .3; }
+    .trace.is-active {
+      background: rgba(139,124,255,.08);
+    }
 
     /* ---------- teams ---------- */
     .teams { padding: 96px 0 48px; }
@@ -2213,6 +2328,11 @@
       .task-foot { grid-template-columns: 1fr; gap: 8px; padding: 14px 18px; }
       .task-foot-note { text-align: left; }
       .demo { padding: 64px 0 24px; }
+      .task-strip { padding: 12px 14px 10px; }
+      .phase-head { padding: 10px 14px; gap: 8px; }
+      .phase-meta { font-size: 11px; }
+      .strip-bar { height: 12px; border-radius: 6px; }
+      .strip-ticks { font-size: 10px; }
       .terminal { transform: none; }
       .terminal-body { font-size: 12.5px; }
       .nav-inner { padding: 12px 16px; gap: 8px; }
@@ -2593,109 +2713,148 @@
 
     <section id="demo" class="demo">
       <div class="demo-head">
-        <h2 class="section-title">One task. Every tool.</h2>
+        <h2 class="section-title">One task. Every tool. Receipt-level.</h2>
       </div>
 
-      <div class="task-card">
+      <div class="task-card" id="task-card-demo">
         <div class="task-card-head">
           <div class="task-meta">
-            <span class="task-anchor">CHESS-412</span>
+            <span class="task-anchor">OTA-12</span>
             <span class="task-title">Wire OTA phone-OTP login end-to-end</span>
           </div>
           <div class="task-stats">
             <span><span class="stat-k">duration</span> 47m</span>
-            <span><span class="stat-k">traces</span> 9</span>
-            <span><span class="stat-k">tokens</span> 38.4k</span>
+            <span><span class="stat-k">events</span> 9</span>
             <span><span class="stat-k">cost</span> $0.42</span>
+            <span class="task-shipped"><span class="stat-k">shipped</span> abc1f2e</span>
           </div>
         </div>
 
-        <div class="task-prompt">
-          <span class="task-prompt-label">prompt</span>
-          <p>"add OTA dashboard phone-OTP login — Twilio for SMS, Django session cookies, then wire the Remix dashboard redirect after verify"</p>
+        <div class="task-strip">
+          <div class="task-strip-label">timeline · hover a block to highlight events</div>
+          <div class="strip-bar">
+            <span class="strip-seg" data-tool="gemini"  style="flex-grow: 11" data-tip="Gemini · 11m · 2 turns"></span>
+            <span class="strip-seg" data-tool="chatgpt" style="flex-grow: 3"  data-tip="ChatGPT · 3m · 1 turn"></span>
+            <span class="strip-seg" data-tool="cursor"  style="flex-grow: 21" data-tip="Cursor · 21m · 3 edits"></span>
+            <span class="strip-seg" data-tool="bash"    style="flex-grow: 7"  data-tip="Bash · 7m · pytest"></span>
+            <span class="strip-seg" data-tool="git"     style="flex-grow: 3"  data-tip="git · 3m · commit + push"></span>
+          </div>
+          <div class="strip-ticks">
+            <span>09:10</span>
+            <span>09:25</span>
+            <span>09:40</span>
+            <span>09:57</span>
+          </div>
         </div>
 
-        <div class="trace-list">
-          <div class="trace">
-            <div class="trace-time">09:12</div>
-            <div class="trace-tool"><span class="badge b-claude">Claude.ai</span></div>
-            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
-            <div class="trace-detail">"how do Django session cookies work with OTP-based auth?"</div>
-            <div class="trace-cost mono">$0.04</div>
+        <div class="phase phase-research" data-phase="research">
+          <div class="phase-head">
+            <span class="phase-bar"></span>
+            <span class="phase-name">Research</span>
+            <span class="phase-meta">14m · 3 turns · $0.07</span>
           </div>
-          <div class="trace">
-            <div class="trace-time">09:15</div>
-            <div class="trace-tool"><span class="badge b-pplx">Perplexity</span></div>
-            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
-            <div class="trace-detail">"Twilio Verify API quickstart Python"</div>
-            <div class="trace-cost mono">$0.02</div>
+          <div class="trace-list">
+            <div class="trace" data-tool="gemini">
+              <div class="trace-time">09:12</div>
+              <div class="trace-tool"><span class="badge b-gem">Gemini</span></div>
+              <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+              <div class="trace-detail">"how does Django OTP middleware work with session cookies?"</div>
+              <div class="trace-cost mono">$0.02</div>
+            </div>
+            <div class="trace" data-tool="gemini">
+              <div class="trace-time">09:18</div>
+              <div class="trace-tool"><span class="badge b-gem">Gemini</span></div>
+              <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+              <div class="trace-detail">"Twilio Verify API quickstart — Python SDK"</div>
+              <div class="trace-cost mono">$0.02</div>
+            </div>
+            <div class="trace" data-tool="chatgpt">
+              <div class="trace-time">09:23</div>
+              <div class="trace-tool"><span class="badge b-cgpt">ChatGPT</span></div>
+              <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+              <div class="trace-detail">"refining: session-cookie auth after OTP verify — which middleware order?"</div>
+              <div class="trace-cost mono">$0.03</div>
+            </div>
           </div>
-          <div class="trace">
-            <div class="trace-time">09:21</div>
-            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
-            <div class="trace-action"><span class="t-kind kind-read">read</span></div>
-            <div class="trace-detail"><code>chess-be/ota/views.py</code></div>
-            <div class="trace-cost mono">$0.06</div>
+        </div>
+
+        <div class="phase phase-build" data-phase="build">
+          <div class="phase-head">
+            <span class="phase-bar"></span>
+            <span class="phase-name">Build</span>
+            <span class="phase-meta">27m · 4 events · $0.32</span>
           </div>
-          <div class="trace">
-            <div class="trace-time">09:24</div>
-            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
-            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
-            <div class="trace-detail"><code>ota/views.py</code> · <code>ota/serializers.py</code></div>
-            <div class="trace-cost mono">$0.11</div>
+          <div class="trace-list">
+            <div class="trace" data-tool="cursor">
+              <div class="trace-time">09:26</div>
+              <div class="trace-tool"><span class="badge b-cursor">Cursor</span></div>
+              <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+              <div class="trace-detail"><code>chess-be/ota/views.py</code> — add OTP-verify endpoint</div>
+              <div class="trace-cost mono">$0.08</div>
+            </div>
+            <div class="trace" data-tool="cursor">
+              <div class="trace-time">09:34</div>
+              <div class="trace-tool"><span class="badge b-cursor">Cursor</span></div>
+              <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+              <div class="trace-detail"><code>chess-be/ota/serializers.py</code> · phone-number normaliser</div>
+              <div class="trace-cost mono">$0.10</div>
+            </div>
+            <div class="trace" data-tool="bash">
+              <div class="trace-time">09:41</div>
+              <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
+              <div class="trace-action"><span class="t-kind kind-bash">bash</span></div>
+              <div class="trace-detail"><code>pytest chess-be/ota/tests/</code> — 1 failure · country-code prefix</div>
+              <div class="trace-cost mono">$0.05</div>
+            </div>
+            <div class="trace" data-tool="cursor">
+              <div class="trace-time">09:48</div>
+              <div class="trace-tool"><span class="badge b-cursor">Cursor</span></div>
+              <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+              <div class="trace-detail"><code>chess-be/ota/twilio_client.py</code> — fix country-code prefix, tests pass</div>
+              <div class="trace-cost mono">$0.09</div>
+            </div>
           </div>
-          <div class="trace">
-            <div class="trace-time">09:33</div>
-            <div class="trace-tool"><span class="badge b-cgpt">ChatGPT</span></div>
-            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
-            <div class="trace-detail">"expo-router redirect after server response — guard pattern?"</div>
-            <div class="trace-cost mono">$0.03</div>
+        </div>
+
+        <div class="phase phase-ship" data-phase="ship">
+          <div class="phase-head">
+            <span class="phase-bar"></span>
+            <span class="phase-name">Ship</span>
+            <span class="phase-meta">3m · 1 PR · $0.03</span>
           </div>
-          <div class="trace">
-            <div class="trace-time">09:38</div>
-            <div class="trace-tool"><span class="badge b-cursor">Cursor</span></div>
-            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
-            <div class="trace-detail"><code>circlechess-app-ota/web/auth.tsx</code></div>
-            <div class="trace-cost mono">~$0.09</div>
-          </div>
-          <div class="trace">
-            <div class="trace-time">09:46</div>
-            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
-            <div class="trace-action"><span class="t-kind kind-bash">bash</span></div>
-            <div class="trace-detail"><code>pytest chess-be/ota/tests/</code></div>
-            <div class="trace-cost mono">$0.05</div>
-          </div>
-          <div class="trace">
-            <div class="trace-time">09:54</div>
-            <div class="trace-tool"><span class="badge b-gem">Gemini</span></div>
-            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
-            <div class="trace-detail">"why does Twilio Verify return 60200?"</div>
-            <div class="trace-cost mono">$0.01</div>
-          </div>
-          <div class="trace">
-            <div class="trace-time">09:59</div>
-            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
-            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
-            <div class="trace-detail"><code>ota/twilio_client.py</code> — fix country-code prefix</div>
-            <div class="trace-cost mono">$0.01</div>
+          <div class="trace-list">
+            <div class="trace" data-tool="git">
+              <div class="trace-time">09:54</div>
+              <div class="trace-tool"><span class="badge b-git">git</span></div>
+              <div class="trace-action"><span class="t-kind kind-bash">commit</span></div>
+              <div class="trace-detail"><code>git commit -m "OTA-12: phone-OTP login + twilio country-code fix"</code></div>
+              <div class="trace-cost mono">$0.02</div>
+            </div>
+            <div class="trace" data-tool="git">
+              <div class="trace-time">09:57</div>
+              <div class="trace-tool"><span class="badge b-git">git</span></div>
+              <div class="trace-action"><span class="t-kind kind-bash">push</span></div>
+              <div class="trace-detail"><code>git push origin OTA-12</code> · <span class="hl">merged abc1f2e</span></div>
+              <div class="trace-cost mono">$0.01</div>
+            </div>
           </div>
         </div>
 
         <div class="task-foot">
           <div class="task-foot-stat">
             <span class="stat-k">research</span>
-            <span class="stat-v">4 turns · $0.10</span>
+            <span class="stat-v">14m · $0.07</span>
           </div>
           <div class="task-foot-stat">
             <span class="stat-k">build</span>
-            <span class="stat-v">5 turns · $0.32</span>
+            <span class="stat-v">27m · $0.32</span>
           </div>
           <div class="task-foot-stat">
-            <span class="stat-k">ratio</span>
-            <span class="stat-v">research → code in 12m</span>
+            <span class="stat-k">ship</span>
+            <span class="stat-v">3m · $0.03</span>
           </div>
           <div class="task-foot-note">
-            9 traces · 6 tools · 1 task.
+            5 tools · 1 PR shipped · $0.42 total.
           </div>
         </div>
       </div>
@@ -2960,6 +3119,58 @@
       })();
       var heroMode = heroModeFromQuery || 'cards';
       document.body.setAttribute('data-hero', heroMode);
+
+      // -------- demo task: heat-strip ↔ trace linking --------
+      document.querySelectorAll('.task-card').forEach(function (card) {
+        var segs = card.querySelectorAll('.strip-seg');
+        var rows = card.querySelectorAll('.trace[data-tool]');
+        var phaseHeads = card.querySelectorAll('.phase-head');
+        if (!segs.length || !rows.length) return;
+
+        function focusTool(tool) {
+          rows.forEach(function (r) {
+            var match = r.getAttribute('data-tool') === tool;
+            r.classList.toggle('is-active', match);
+            r.classList.toggle('is-dimmed', !match);
+          });
+          segs.forEach(function (s) {
+            s.classList.toggle('is-active', s.getAttribute('data-tool') === tool);
+          });
+          phaseHeads.forEach(function (h) {
+            // light up the phase that contains an active row
+            var phaseEl = h.parentElement;
+            var hasActive = phaseEl.querySelector('.trace.is-active');
+            h.classList.toggle('is-active', !!hasActive);
+          });
+        }
+        function clearFocus() {
+          rows.forEach(function (r) { r.classList.remove('is-active', 'is-dimmed'); });
+          segs.forEach(function (s) { s.classList.remove('is-active'); });
+          phaseHeads.forEach(function (h) { h.classList.remove('is-active'); });
+        }
+
+        segs.forEach(function (seg) {
+          seg.addEventListener('mouseenter', function () { focusTool(seg.getAttribute('data-tool')); });
+          seg.addEventListener('mouseleave', clearFocus);
+          seg.addEventListener('click', function () {
+            // for touch: toggle the focus
+            var tool = seg.getAttribute('data-tool');
+            if (seg.classList.contains('is-active')) clearFocus();
+            else focusTool(tool);
+          });
+        });
+        rows.forEach(function (row) {
+          row.addEventListener('mouseenter', function () {
+            var tool = row.getAttribute('data-tool');
+            segs.forEach(function (s) {
+              s.classList.toggle('is-active', s.getAttribute('data-tool') === tool);
+            });
+          });
+          row.addEventListener('mouseleave', function () {
+            segs.forEach(function (s) { s.classList.remove('is-active'); });
+          });
+        });
+      });
 
       // -------- flip cards --------
       document.querySelectorAll('.hc-card').forEach(function (card) {
