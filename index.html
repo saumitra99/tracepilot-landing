@@ -1369,11 +1369,8 @@
           <span class="grad">for teams.</span>
         </h1>
         <p class="hero-sub">
-          Every prompt, every dollar, every task your whole team spends on AI —
-          across <span class="hl">Claude Code</span>, <span class="hl">Cursor</span>,
-          <span class="hl">ChatGPT</span>, <span class="hl">Claude.ai</span>,
-          <span class="hl">Perplexity</span>, and <span class="hl">Gemini</span>.
-          Runs on your machines. <span class="hl">Nothing leaves them.</span>
+          Every prompt, every dollar, every task — across every AI tool your team uses.
+          <span class="hl">On your machines. Nothing leaves them.</span>
         </p>
 
         <form class="waitlist" autocomplete="off">
@@ -1443,104 +1440,55 @@
     </section>
 
     <section id="pillars" class="pillars">
-      <div class="pillars-head">
-        <h2 class="section-title">Three things, done in one place.</h2>
-        <p class="section-sub">Tracepilot pulls every dev's AI work — chats, edits, tool calls — into one local store. Then surfaces the three views that actually move the needle.</p>
-      </div>
-
       <div class="pillar-grid">
         <div class="pillar p-team">
           <div class="pillar-icon">◇</div>
           <div class="pillar-tag">Team-wide</div>
           <h3>Every dev. Every dollar.</h3>
-          <p>One number for the org, then drill into any developer, ticket, or task. Rework rate, cache hit, forecast — surfaced per dev, per week.</p>
-          <ul class="pillar-list">
-            <li>Per-dev spend &amp; rework</li>
-            <li>$ per Jira / Linear ticket</li>
-            <li>End-of-month forecast</li>
-            <li>Anomaly alerts to Slack</li>
-          </ul>
         </div>
-
         <div class="pillar p-local">
           <div class="pillar-icon">◉</div>
           <div class="pillar-tag">Local-first</div>
           <h3>Nothing leaves your machines.</h3>
-          <p>Tracepilot is a local daemon. No cloud. No analytics endpoint. No env vars. No proxy in default mode. <code>tracepilot uninstall</code> removes it all.</p>
-          <ul class="pillar-list">
-            <li>SQLite at <code>~/.tracepilot/</code></li>
-            <li>Reads each tool's local store</li>
-            <li>No keystrokes, no screen capture</li>
-            <li>Clipboard hashed before storage</li>
-          </ul>
         </div>
-
         <div class="pillar p-task">
           <div class="pillar-icon">◆</div>
           <div class="pillar-tag">Task-level</div>
-          <h3>Cost, insights &amp; full trace.</h3>
-          <p>Every prompt, every tool call, every file edit, every model swap — stitched across all your AI tools into one task with cache-aware pricing.</p>
-          <ul class="pillar-list">
-            <li>Cache-aware Anthropic pricing</li>
-            <li>Cross-tool task stitching</li>
-            <li>Click-through to the trail</li>
-            <li>Web research batched w/ code</li>
-          </ul>
+          <h3>Cost, insights, full trace.</h3>
         </div>
       </div>
     </section>
 
     <section id="features" class="features">
       <h2 class="section-title">How it stays local.</h2>
-      <p class="section-sub">Tracepilot reads each tool's local transcript store. No proxy, no CA cert, no env vars — just a daemon and a dashboard at <code>localhost:4321</code>.</p>
 
       <div class="grid">
         <div class="card">
           <div class="card-icon">◇</div>
-          <h3>Local-first by default</h3>
-          <p>SQLite at <code>~/.tracepilot/traces.db</code>. Dashboard at <code>localhost:4321</code>. Your data never leaves your machine.</p>
+          <h3>Local-first</h3>
+          <p>SQLite at <code>~/.tracepilot/</code>. Dashboard at <code>localhost:4321</code>.</p>
         </div>
         <div class="card">
           <div class="card-icon">◈</div>
           <h3>Multi-tool, one view</h3>
-          <p>Claude Code JSONL, Cursor SQLite, Copilot logs, and Antigravity — unified into one timeline of <span class="hl">tasks</span>.</p>
+          <p>Claude Code · Cursor · Copilot · ChatGPT · Claude.ai · Perplexity · Gemini.</p>
         </div>
         <div class="card">
           <div class="card-icon">◉</div>
           <h3>Cache-aware pricing</h3>
-          <p>Anthropic ephemeral 5m/1h cache writes and reads priced correctly. Per-task token and dollar totals you can trust.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">◊</div>
-          <h3>Zero setup mode</h3>
-          <p>Default mode is pure file-watching. No MITM proxy, no certificate dance. Just run <code>tracepilot start</code>.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">◍</div>
-          <h3>Optional live capture</h3>
-          <p>Want raw network traces too? <code>tracepilot proxy enable</code> spins up an opt-in HTTPS MITM, fully reversible.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">◐</div>
-          <h3>Single binary</h3>
-          <p>One Rust binary per platform. No Electron. No Tauri. The UI is plain HTTP served to your browser of choice.</p>
+          <p>5m / 1h cache writes &amp; reads priced correctly. Numbers you can trust.</p>
         </div>
         <div class="card">
           <div class="card-icon">◑</div>
-          <h3>Web research, batched.</h3>
-          <p>ChatGPT, Claude.ai, Perplexity, Gemini — when you research <em>then</em> build, Tracepilot batches the chat turns with the code edits into <span class="hl">one task</span>. See the real cost of getting from question to PR.</p>
+          <h3>Research, batched</h3>
+          <p>Chat tabs stitched into the task they belong to. See cost from question to PR.</p>
         </div>
       </div>
     </section>
 
     <section id="demo" class="demo">
       <div class="demo-head">
-        <span class="pill">
-          <span class="pill-dot"></span>
-          Live demo
-        </span>
-        <h2 class="section-title">Research and code, in the same task.</h2>
-        <p class="section-sub">Tracepilot reads your AI chat tabs, your editor's transcript, and your CLI agent's JSONL — then groups everything sharing a branch, ticket, or file into one task. Click any row to see the full trail.</p>
+        <h2 class="section-title">One task. Every tool.</h2>
       </div>
 
       <div class="task-card">
@@ -1642,14 +1590,14 @@
             <span class="stat-v">research → code in 12m</span>
           </div>
           <div class="task-foot-note">
-            Without batching: 9 unrelated rows in 4 different tools. With Tracepilot: one task, one anchor, one cost.
+            9 traces · 6 tools · 1 task.
           </div>
         </div>
       </div>
     </section>
 
     <section id="how" class="how">
-      <h2 class="section-title">Three steps. Then forget it's running.</h2>
+      <h2 class="section-title">Install. Run. Forget.</h2>
 
       <div class="steps">
         <div class="step">
@@ -1675,140 +1623,11 @@
 
     <section id="teams" class="teams">
       <div class="teams-head">
-        <span class="pill">
-          <span class="pill-dot"></span>
-          Built for solos &amp; teams
-        </span>
-        <h2 class="section-title">One trace stream. Every lens you need.</h2>
-        <p class="section-sub">Whether you're a solo dev getting sharper, or a team that needs visibility across engineers, leads, and budget — same data, different views.</p>
-        <div class="tabs-bar" role="tablist">
-          <button class="tab-btn" role="tab" aria-selected="false" data-tab="solo">For individuals</button>
-          <button class="tab-btn active" role="tab" aria-selected="true" data-tab="team">For teams</button>
-        </div>
+        <h2 class="section-title">Three roles. One dashboard.</h2>
+        <p class="section-sub">Toggle a role. See exactly what they'd see.</p>
       </div>
 
-      <div class="tab-panel" id="tab-solo" role="tabpanel" hidden>
-        <div class="personas personas-solo">
-          <div class="persona p-dev">
-            <div class="persona-head">
-              <div class="persona-icon">◆</div>
-              <div>
-                <h3>For individual developers</h3>
-                <p class="persona-tag">My Coaching</p>
-              </div>
-            </div>
-            <p class="persona-sub">Spot your own patterns before anyone else does. Self-coaching, no team required.</p>
-            <ul class="persona-list">
-              <li><b>Rework rate.</b> How often your follow-up prompt says "fix / broken / wrong".</li>
-              <li><b>Cache hit ratio.</b> How much context you're paying to re-send each turn.</li>
-              <li><b>First-prompt success.</b> Tasks closed in one human turn vs many.</li>
-              <li><b>Hour-of-day cost curve.</b> When you spend most — and whether tired hours are expensive hours.</li>
-              <li><b>Top expensive tasks.</b> Click into any task to see the prompt, the tool calls, and the cost trail.</li>
-              <li><b>Model fit.</b> Opus on a Read-only task is overkill — see the cheaper equivalent.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="previews">
-          <div class="preview">
-            <div class="preview-head">
-              <div class="preview-title">
-                <span class="preview-tag">Developer view</span>
-                <h4>My AI Coaching</h4>
-              </div>
-              <span class="preview-pill pp-dev">self-coaching</span>
-            </div>
-            <div class="preview-img-wrap">
-              <img src="assets/dev.png" alt="Tracepilot developer dashboard showing rework rate, cache hit, top expensive tasks, hour-of-day spend, correction streaks" loading="lazy" onerror="this.outerHTML='&lt;div class=ph&gt;dev dashboard preview&lt;/div&gt;'" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-panel active" id="tab-team" role="tabpanel">
-        <div class="personas personas-team">
-          <div class="persona p-lead">
-            <div class="persona-head">
-              <div class="persona-icon">◇</div>
-              <div>
-                <h3>For tech leads</h3>
-                <p class="persona-tag">Team Quality</p>
-              </div>
-            </div>
-            <p class="persona-sub">Coach the team with data, not vibes.</p>
-            <ul class="persona-list">
-              <li><b>Per-dev quality table.</b> Spend, rework, cache hit, top tool — at a glance.</li>
-              <li><b>Top expensive tasks.</b> Postmortem queue. Click any row → full trail.</li>
-              <li><b>Repeated knowledge gaps.</b> Same question 3+ times = a missing doc.</li>
-              <li><b>Skill &amp; subagent adoption.</b> Who's leveraging parallel agents and reviews.</li>
-            </ul>
-          </div>
-
-          <div class="persona p-mgr">
-            <div class="persona-head">
-              <div class="persona-icon">◈</div>
-              <div>
-                <h3>For managers</h3>
-                <p class="persona-tag">Org &amp; Budget · team scope</p>
-              </div>
-            </div>
-            <p class="persona-sub">Aggregate first, drill into any dev or ticket without leaving the page.</p>
-            <ul class="persona-list">
-              <li><b>Spend per dev, per week.</b> Burndown chart. Click → that dev's coaching.</li>
-              <li><b>Spend per Jira / Linear ticket.</b> $/story-point attribution.</li>
-              <li><b>End-of-month forecast.</b> Know before finance asks.</li>
-              <li><b>Anomaly alerts.</b> 3σ-above-baseline spikes pinged to Slack.</li>
-            </ul>
-          </div>
-
-          <div class="persona p-own">
-            <div class="persona-head">
-              <div class="persona-icon">◉</div>
-              <div>
-                <h3>For owners</h3>
-                <p class="persona-tag">Org &amp; Budget · full scope</p>
-              </div>
-            </div>
-            <p class="persona-sub">Defend the AI budget. Every dollar attributed, every paid tool justified.</p>
-            <ul class="persona-list">
-              <li><b>Org-wide burndown.</b> All teams, all repos, all paid tools.</li>
-              <li><b>Cache-saved $.</b> Concrete savings caching gives you, weekly.</li>
-              <li><b>Tool subscription justification.</b> Auto-suggest keep / downgrade / drop.</li>
-              <li><b>$/PR proxy.</b> Cost-per-shipped-PR when anchors match merges.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="drill">
-          <h3 class="drill-title">How the drill-down works</h3>
-          <div class="drill-row">
-            <div class="drill-step">
-              <span class="drill-n">01</span>
-              <h4>Org &amp; Budget</h4>
-              <p>Owners and managers land here. Total spend, forecast, cache-saved $, model mix, anomaly feed.</p>
-            </div>
-            <div class="drill-arrow">→</div>
-            <div class="drill-step">
-              <span class="drill-n">02</span>
-              <h4>Team Quality</h4>
-              <p>Click any dev row, ticket, or anomaly. Lands on the team table with that row highlighted.</p>
-            </div>
-            <div class="drill-arrow">→</div>
-            <div class="drill-step">
-              <span class="drill-n">03</span>
-              <h4>My Coaching</h4>
-              <p>Click the dev. See their full coaching dashboard read-only. Their rework streaks, their hour-of-day, their top tasks.</p>
-            </div>
-            <div class="drill-arrow">→</div>
-            <div class="drill-step">
-              <span class="drill-n">04</span>
-              <h4>Task detail</h4>
-              <p>Click any task. Full prompt, every tool call, every model swap, the cost trail end-to-end.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="minidash" data-role="lead">
+      <div class="minidash" data-role="lead">
           <div class="md-head">
             <div class="md-title">
               <span class="md-mark">◢◤</span>
@@ -1823,36 +1642,36 @@
           </div>
 
           <div class="md-body">
-            <div class="md-kpis" id="md-kpis"></div>
-            <div class="md-banner" id="md-banner"></div>
+            <div class="md-kpis"></div>
+            <div class="md-banner"></div>
             <div class="md-grid">
               <div class="md-main">
-                <div class="md-panel-head" id="md-main-title">main</div>
-                <table class="md-table"><thead id="md-thead"></thead><tbody id="md-tbody"></tbody></table>
+                <div class="md-panel-head md-main-title">main</div>
+                <table class="md-table"><thead class="md-thead"></thead><tbody class="md-tbody"></tbody></table>
               </div>
               <div class="md-side">
                 <div class="md-card">
-                  <div class="md-panel-head" id="md-sideA-title">side A</div>
-                  <div class="md-list" id="md-sideA"></div>
+                  <div class="md-panel-head md-sideA-title">side A</div>
+                  <div class="md-list md-sideA"></div>
                 </div>
                 <div class="md-card">
-                  <div class="md-panel-head" id="md-sideB-title">side B</div>
-                  <div class="md-list" id="md-sideB"></div>
+                  <div class="md-panel-head md-sideB-title">side B</div>
+                  <div class="md-list md-sideB"></div>
                 </div>
               </div>
             </div>
             <div class="md-footer">
               <div class="md-card">
-                <div class="md-panel-head" id="md-footA-title">A</div>
-                <div class="md-list" id="md-footA"></div>
+                <div class="md-panel-head md-footA-title">A</div>
+                <div class="md-list md-footA"></div>
               </div>
               <div class="md-card">
-                <div class="md-panel-head" id="md-footB-title">B</div>
-                <div class="md-list" id="md-footB"></div>
+                <div class="md-panel-head md-footB-title">B</div>
+                <div class="md-list md-footB"></div>
               </div>
               <div class="md-card">
-                <div class="md-panel-head" id="md-footC-title">C</div>
-                <div class="md-list" id="md-footC"></div>
+                <div class="md-panel-head md-footC-title">C</div>
+                <div class="md-list md-footC"></div>
               </div>
             </div>
           </div>
@@ -1872,13 +1691,11 @@
             <span class="chip">Model-mix simulator</span>
           </div>
         </div>
-      </div>
     </section>
 
     <section id="privacy" class="privacy">
       <div class="privacy-inner">
-        <h2 class="section-title">Privacy isn't a feature. It's the architecture.</h2>
-        <p class="section-sub">Tracepilot is local. There is no Tracepilot cloud. There is no analytics endpoint. The daemon never opens a socket to anything we own.</p>
+        <h2 class="section-title">Privacy is the architecture.</h2>
 
         <ul class="limits">
           <li><span class="lim-x">×</span> No keystroke logging. Ever.</li>
@@ -1892,8 +1709,8 @@
     </section>
 
     <section id="waitlist" class="cta">
-      <h2>Get notified when the beta opens.</h2>
-      <p>We're polishing the rough edges with a small group. Drop your email — we'll send one message, when it's ready.</p>
+      <h2>Get early access.</h2>
+      <p>One email when the beta opens.</p>
       <form class="waitlist waitlist-lg" autocomplete="off">
         <input type="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
         <button type="submit">
@@ -2251,12 +2068,6 @@
         }
       };
 
-      var minidash = document.querySelector('.minidash');
-      var mdKpis   = document.getElementById('md-kpis');
-      var mdBanner = document.getElementById('md-banner');
-      var mdThead  = document.getElementById('md-thead');
-      var mdTbody  = document.getElementById('md-tbody');
-
       function cellHTML(c) {
         if (typeof c === 'string') return '<td>' + c + '</td>';
         return '<td class="' + (c.cls || '') + '">' + (c.v != null ? c.v : '') + '</td>';
@@ -2282,54 +2093,53 @@
         return '';
       }
 
-      function setText(id, txt) {
-        var el = document.getElementById(id);
-        if (el) el.textContent = txt || '';
-      }
-      function setHTML(id, html) {
-        var el = document.getElementById(id);
-        if (el) el.innerHTML = html || '';
+      function setIn(container, sel, mode, payload) {
+        var el = container.querySelector(sel);
+        if (!el) return;
+        if (mode === 'text') el.textContent = payload || '';
+        else el.innerHTML = payload || '';
       }
 
-      function paint(role) {
+      function paint(container, role) {
         var d = ROLE_DATA[role];
         if (!d) return;
-        mdKpis.innerHTML = d.kpis.map(function (k) {
+        setIn(container, '.md-kpis', 'html', d.kpis.map(function (k) {
           return '<div class="md-kpi"><div class="md-kpi-v">' + k.v + '</div><div class="md-kpi-l">' + k.l + '</div>' + (k.d ? '<div class="md-kpi-d">' + k.d + '</div>' : '') + '</div>';
-        }).join('');
-        mdBanner.innerHTML = d.banner;
-        setText('md-main-title', d.mainTitle || 'detail');
-        mdThead.innerHTML = '<tr>' + d.head.map(function (h) { return '<th class="' + (h.cls || '') + '">' + h.t + '</th>'; }).join('') + '</tr>';
-        mdTbody.innerHTML = d.rows.map(function (r) {
+        }).join(''));
+        setIn(container, '.md-banner', 'html', d.banner);
+        setIn(container, '.md-main-title', 'text', d.mainTitle || 'detail');
+        setIn(container, '.md-thead', 'html', '<tr>' + d.head.map(function (h) { return '<th class="' + (h.cls || '') + '">' + h.t + '</th>'; }).join('') + '</tr>');
+        setIn(container, '.md-tbody', 'html', d.rows.map(function (r) {
           return '<tr>' + r.cells.map(cellHTML).join('') + '</tr>';
-        }).join('');
-        setText('md-sideA-title', d.sideA && d.sideA.title);
-        setHTML('md-sideA', renderPanel(d.sideA));
-        setText('md-sideB-title', d.sideB && d.sideB.title);
-        setHTML('md-sideB', renderPanel(d.sideB));
-        setText('md-footA-title', d.footA && d.footA.title);
-        setHTML('md-footA', renderPanel(d.footA));
-        setText('md-footB-title', d.footB && d.footB.title);
-        setHTML('md-footB', renderPanel(d.footB));
-        setText('md-footC-title', d.footC && d.footC.title);
-        setHTML('md-footC', renderPanel(d.footC));
-        minidash.setAttribute('data-role', role);
+        }).join(''));
+        setIn(container, '.md-sideA-title', 'text', d.sideA && d.sideA.title);
+        setIn(container, '.md-sideA',       'html', renderPanel(d.sideA));
+        setIn(container, '.md-sideB-title', 'text', d.sideB && d.sideB.title);
+        setIn(container, '.md-sideB',       'html', renderPanel(d.sideB));
+        setIn(container, '.md-footA-title', 'text', d.footA && d.footA.title);
+        setIn(container, '.md-footA',       'html', renderPanel(d.footA));
+        setIn(container, '.md-footB-title', 'text', d.footB && d.footB.title);
+        setIn(container, '.md-footB',       'html', renderPanel(d.footB));
+        setIn(container, '.md-footC-title', 'text', d.footC && d.footC.title);
+        setIn(container, '.md-footC',       'html', renderPanel(d.footC));
+        container.setAttribute('data-role', role);
       }
 
-      if (minidash) {
-        paint(minidash.getAttribute('data-role') || 'manager');
-        minidash.querySelectorAll('.md-pill').forEach(function (btn) {
+      document.querySelectorAll('.minidash').forEach(function (container) {
+        var defaultRole = container.getAttribute('data-role') || 'lead';
+        paint(container, defaultRole);
+        container.querySelectorAll('.md-pill').forEach(function (btn) {
           btn.addEventListener('click', function () {
             var role = btn.getAttribute('data-role');
-            minidash.querySelectorAll('.md-pill').forEach(function (b) {
+            container.querySelectorAll('.md-pill').forEach(function (b) {
               var on = b === btn;
               b.classList.toggle('active', on);
               b.setAttribute('aria-selected', on ? 'true' : 'false');
             });
-            paint(role);
+            paint(container, role);
           });
         });
-      }
+      });
     })();
   </script>
 </body>
