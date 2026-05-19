@@ -1,0 +1,2017 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tracepilot — The local AI tracker for teams.</title>
+  <meta name="description" content="Every prompt, every dollar, every task your whole team spends on AI — across Claude Code, Cursor, ChatGPT, Claude.ai, Perplexity, Gemini. Runs locally. Nothing leaves your machines." />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta property="og:title" content="Tracepilot — The local AI tracker for teams." />
+  <meta property="og:description" content="Team-wide AI visibility. Cost, insights, and the full trace of every task. Runs on your machines. Coming soon." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-soft: #11111a;
+      --panel: #14141f;
+      --panel-2: #181826;
+      --line: #23233a;
+      --line-soft: #1b1b2c;
+      --text: #e6e6f0;
+      --text-soft: #a4a4b8;
+      --text-mute: #6f6f86;
+      --accent: #8b7cff;
+      --accent-2: #c084fc;
+      --accent-3: #38bdf8;
+      --good: #4ade80;
+      --warn: #fbbf24;
+      --bad: #f87171;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 24px 60px -20px rgba(0,0,0,.6);
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: clip;
+      max-width: 100%;
+      scroll-behavior: smooth;
+    }
+    section[id], main > section { scroll-margin-top: 80px; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    code, .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    code {
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.18);
+      padding: 1px 6px;
+      border-radius: 6px;
+      font-size: .88em;
+      color: #d6d0ff;
+    }
+
+    /* ---------- background fx ---------- */
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,.05) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: .35;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-1 { width: 520px; height: 520px; background: #6d5cff; top: -180px; left: -120px; }
+    .glow-2 { width: 480px; height: 480px; background: #c084fc; top: -120px; right: -160px; opacity: .25; }
+    .glow-3 { width: 600px; height: 600px; background: #38bdf8; top: 1100px; left: 50%; transform: translateX(-50%); opacity: .12; }
+
+    main, header, footer { position: relative; z-index: 1; }
+
+    /* ---------- nav ---------- */
+    .nav {
+      position: sticky; top: 0;
+      z-index: 50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(10,10,15,.55);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 600; letter-spacing: -.01em;
+    }
+    .brand-mark {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 18px;
+      text-shadow: 0 0 18px rgba(139,124,255,.55);
+    }
+    .brand-name { font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: -.02em; }
+    .nav-links { display: flex; align-items: center; gap: 24px; font-size: 14px; color: var(--text-soft); }
+    .nav-links a { transition: color .15s ease; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      color: var(--text) !important;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(139,124,255,.08), rgba(139,124,255,.02));
+    }
+    .nav-cta:hover { border-color: rgba(139,124,255,.45); }
+
+    /* ---------- container ---------- */
+    main { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---------- hero ---------- */
+    .hero {
+      padding: 80px 0 60px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12.5px; font-weight: 500;
+      color: var(--text-soft);
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(139,124,255,.07), rgba(139,124,255,.02));
+    }
+    .pill-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--good);
+      box-shadow: 0 0 12px var(--good);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .55; transform: scale(.85); }
+    }
+    .hero-title {
+      font-size: clamp(40px, 5.4vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      font-weight: 700;
+      margin: 22px 0 18px;
+    }
+    .grad {
+      background: linear-gradient(90deg, #c084fc 0%, #8b7cff 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-soft);
+      max-width: 560px;
+      margin: 0 0 28px;
+    }
+    .hl { color: var(--text); font-weight: 500; }
+
+    .waitlist {
+      display: flex; gap: 8px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px;
+      max-width: 460px;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .waitlist:focus-within {
+      border-color: rgba(139,124,255,.55);
+      box-shadow: 0 0 0 4px rgba(139,124,255,.12);
+    }
+    .waitlist input {
+      flex: 1; min-width: 0;
+      background: transparent;
+      border: 0; outline: 0;
+      color: var(--text);
+      font: inherit;
+      padding: 8px 14px;
+    }
+    .waitlist input::placeholder { color: var(--text-mute); }
+    .waitlist button {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 0;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font: inherit; font-weight: 600;
+      color: #0b0b14;
+      background: linear-gradient(135deg, #c0b6ff, #8b7cff 55%, #38bdf8);
+      cursor: pointer;
+      transition: transform .12s ease, filter .15s ease;
+    }
+    .waitlist button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+    .waitlist button:active { transform: translateY(0); }
+    .waitlist-note {
+      font-size: 13px;
+      color: var(--text-mute);
+      margin: 10px 4px 0;
+    }
+
+    .hero-meta {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+      margin-top: 28px;
+      font-size: 13.5px;
+      color: var(--text-soft);
+    }
+    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+    .dot-g { background: var(--good); box-shadow: 0 0 8px var(--good); }
+    .sep { color: var(--text-mute); }
+
+    /* ---------- terminal mockup ---------- */
+    .terminal {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: perspective(1400px) rotateY(-3deg) rotateX(2deg);
+      transition: transform .35s ease;
+    }
+    .terminal:hover { transform: perspective(1400px) rotateY(-1deg) rotateX(0deg); }
+    .terminal-top {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .tdot { width: 11px; height: 11px; border-radius: 50%; }
+    .tdot-r { background: #ff5f57; }
+    .tdot-y { background: #febc2e; }
+    .tdot-g { background: #28c840; }
+    .terminal-title {
+      margin-left: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text-mute);
+    }
+    .terminal-body { padding: 6px 0; font-size: 13.5px; }
+    .row {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr .6fr .6fr;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .row:last-child { border-bottom: 0; }
+    .row-head {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-mute);
+      padding-top: 10px; padding-bottom: 10px;
+    }
+    .row-total {
+      font-weight: 600;
+      background: rgba(139,124,255,.05);
+      color: var(--text);
+    }
+    .t-name { color: var(--text); }
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 500;
+      border: 1px solid transparent;
+      width: fit-content;
+    }
+    .b-claude   { background: rgba(217,119,87,.12);  color: #f0a583; border-color: rgba(217,119,87,.25); }
+    .b-cursor   { background: rgba(139,124,255,.12); color: #c0b6ff; border-color: rgba(139,124,255,.25); }
+    .b-copilot  { background: rgba(56,189,248,.12);  color: #7cd4fd; border-color: rgba(56,189,248,.25); }
+    .b-antigrav { background: rgba(74,222,128,.12);  color: #86efac; border-color: rgba(74,222,128,.25); }
+    .b-pplx     { background: rgba(34,211,238,.12);  color: #67e8f9; border-color: rgba(34,211,238,.25); }
+    .b-cgpt     { background: rgba(16,185,129,.12);  color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+    .b-gem      { background: rgba(96,165,250,.12);  color: #93c5fd; border-color: rgba(96,165,250,.25); }
+
+    /* ---------- sections ---------- */
+    .section-title {
+      font-size: clamp(28px, 3.4vw, 40px);
+      line-height: 1.15;
+      letter-spacing: -.025em;
+      font-weight: 700;
+      margin: 0 0 14px;
+      max-width: 760px;
+    }
+    .section-sub {
+      color: var(--text-soft);
+      font-size: 17px;
+      max-width: 680px;
+      margin: 0 0 44px;
+    }
+
+    .features { padding: 96px 0 32px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px 24px;
+      transition: border-color .2s ease, transform .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(600px 200px at -10% -20%, rgba(139,124,255,.10), transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .card:hover { border-color: rgba(139,124,255,.35); transform: translateY(-2px); }
+    .card:hover::after { opacity: 1; }
+    .card-icon {
+      width: 36px; height: 36px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      background: rgba(139,124,255,.1);
+      border: 1px solid rgba(139,124,255,.25);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      margin-bottom: 14px;
+    }
+    .card h3 {
+      font-size: 17px;
+      margin: 0 0 8px;
+      letter-spacing: -.01em;
+    }
+    .card p {
+      color: var(--text-soft);
+      font-size: 14.5px;
+      margin: 0;
+    }
+
+    /* ---------- how it works ---------- */
+    .how { padding: 96px 0 64px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .step-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+    }
+    .step h3 {
+      font-size: 17px;
+      margin: 0 0 14px;
+      letter-spacing: -.01em;
+    }
+    .code {
+      background: #08080d;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #e0e0ee;
+      margin: 0;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .code .prompt { color: var(--accent); user-select: none; margin-right: 8px; }
+    .code .muted { color: var(--text-mute); }
+
+    /* ---------- privacy ---------- */
+    .privacy { padding: 64px 0 32px; }
+    .privacy-inner {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .privacy-inner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(139,124,255,.15), transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(56,189,248,.10), transparent 50%);
+      pointer-events: none;
+    }
+    .privacy-inner > * { position: relative; }
+    .limits {
+      list-style: none; padding: 0; margin: 24px 0 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .limits li {
+      display: flex; align-items: flex-start; gap: 12px;
+      color: var(--text-soft);
+      font-size: 15px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+    }
+    .lim-x, .lim-check {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .lim-x { background: rgba(248,113,113,.12); color: var(--bad); border: 1px solid rgba(248,113,113,.25); }
+    .lim-check { background: rgba(74,222,128,.12); color: var(--good); border: 1px solid rgba(74,222,128,.25); }
+
+    /* ---------- cta ---------- */
+    .cta { padding: 96px 0; text-align: center; }
+    .cta h2 {
+      font-size: clamp(28px, 3.6vw, 40px);
+      letter-spacing: -.025em;
+      margin: 0 0 12px;
+    }
+    .cta p { color: var(--text-soft); max-width: 540px; margin: 0 auto 28px; font-size: 17px; }
+    .waitlist-lg { margin: 0 auto; max-width: 480px; }
+
+    /* ---------- preview gallery ---------- */
+    .previews {
+      display: flex; flex-direction: column;
+      gap: 28px;
+      margin-top: 36px;
+    }
+    .preview {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .preview-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .preview-title { display: inline-flex; align-items: center; gap: 12px; }
+    .preview-title h4 { font-size: 15px; margin: 0; letter-spacing: -.01em; }
+    .preview-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .preview-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .pp-dev  { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .pp-lead { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .pp-mgr  { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .pp-own  { background: rgba(52,211,153,.10);  color: #6ee7b7; border-color: rgba(52,211,153,.30); }
+    .preview-img-wrap {
+      background: #0c0c14;
+      padding: 14px;
+    }
+    .preview-img-wrap img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid var(--line-soft);
+    }
+    .preview-img-wrap .ph {
+      width: 100%; aspect-ratio: 16 / 10;
+      border-radius: 10px;
+      background:
+        repeating-linear-gradient(45deg, rgba(139,124,255,.04) 0 8px, transparent 8px 16px),
+        linear-gradient(180deg, #14141f, #11111a);
+      border: 1px dashed rgba(139,124,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-mute);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+
+    /* ---------- pillars ---------- */
+    .pillars { padding: 80px 0 32px; }
+    .pillars-head { max-width: 760px; margin-bottom: 32px; }
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .pillar {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 26px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .pillar::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .p-team::before  { background: linear-gradient(90deg, #8b7cff, transparent); }
+    .p-local::before { background: linear-gradient(90deg, #34d399, transparent); }
+    .p-task::before  { background: linear-gradient(90deg, #38bdf8, transparent); }
+    .pillar:hover { transform: translateY(-2px); border-color: rgba(139,124,255,.35); }
+    .pillar-icon {
+      width: 42px; height: 42px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      border: 1px solid;
+      margin-bottom: 12px;
+    }
+    .p-team  .pillar-icon { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .p-local .pillar-icon { background: rgba(52,211,153,.10);  color: #6ee7b7; border-color: rgba(52,211,153,.30); }
+    .p-task  .pillar-icon { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .pillar-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      margin-bottom: 6px;
+    }
+    .pillar h3 {
+      font-size: 19px;
+      margin: 0 0 10px;
+      letter-spacing: -.015em;
+    }
+    .pillar > p {
+      color: var(--text-soft);
+      font-size: 14.5px;
+      margin: 0 0 16px;
+    }
+    .pillar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex; flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid var(--line-soft);
+      padding-top: 14px;
+    }
+    .pillar-list li {
+      font-size: 13px;
+      color: var(--text-soft);
+      padding-left: 18px;
+      position: relative;
+    }
+    .pillar-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 7px;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      opacity: .8;
+    }
+    .p-team  .pillar-list li::before { background: #8b7cff; }
+    .p-local .pillar-list li::before { background: #34d399; }
+    .p-task  .pillar-list li::before { background: #38bdf8; }
+
+    /* ---------- mini dashboard (interactive) ---------- */
+    .minidash {
+      margin-top: 24px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .md-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; flex-wrap: wrap;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .md-title { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+    .md-mark {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 14px;
+    }
+    .md-name { font-size: 12.5px; color: var(--text); }
+    .md-demo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      border: 1px solid var(--line);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .md-toggle {
+      display: inline-flex;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .md-pill {
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      background: transparent;
+      border: 0;
+      color: var(--text-soft);
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+    .md-pill:hover { color: var(--text); }
+    .md-pill.active {
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(139,124,255,.35);
+    }
+    .minidash[data-role="lead"]    .md-pill.active { background: rgba(139,124,255,.18); }
+    .minidash[data-role="manager"] .md-pill.active { background: rgba(251,191,36,.18); box-shadow: inset 0 0 0 1px rgba(251,191,36,.35); }
+    .minidash[data-role="owner"]   .md-pill.active { background: rgba(52,211,153,.18);  box-shadow: inset 0 0 0 1px rgba(52,211,153,.35); }
+
+    .md-body { padding: 18px 18px 4px; }
+    .md-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .md-kpi {
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      padding: 14px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .md-kpi::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    }
+    .minidash[data-role="lead"]    .md-kpi::before { background: #8b7cff; }
+    .minidash[data-role="manager"] .md-kpi::before { background: #fbbf24; }
+    .minidash[data-role="owner"]   .md-kpi::before { background: #34d399; }
+    .md-kpi-v {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.015em;
+      line-height: 1.1;
+    }
+    .md-kpi-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      margin-top: 6px;
+    }
+    .md-kpi-d {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .md-banner {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      background: rgba(255,255,255,.02);
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .md-banner::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+    .minidash[data-role="lead"]    .md-banner::before { background: #8b7cff; }
+    .minidash[data-role="manager"] .md-banner::before { background: #fbbf24; }
+    .minidash[data-role="owner"]   .md-banner::before { background: #34d399; }
+    .md-banner b { color: var(--text); }
+
+    .md-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .md-table thead th {
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line-soft);
+      font-weight: 500;
+    }
+    .md-table thead th.num { text-align: right; }
+    .md-table tbody td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line-soft);
+      color: var(--text);
+    }
+    .md-table tbody tr:last-child td { border-bottom: 0; }
+    .md-table tbody tr {
+      transition: background .15s ease;
+    }
+    .md-table tbody tr:hover {
+      background: rgba(139,124,255,.04);
+      cursor: pointer;
+    }
+    .md-table td.num {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+    }
+    .md-table td.warn { color: #fcd34d; }
+    .md-table td.bad  { color: #fca5a5; }
+    .md-table td.good { color: #86efac; }
+    .md-pill-mini {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid;
+    }
+    .verdict-keep      { background: rgba(74,222,128,.10);  color: #86efac; border-color: rgba(74,222,128,.30); }
+    .verdict-downgrade { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .verdict-drop      { background: rgba(248,113,113,.10); color: #fca5a5; border-color: rgba(248,113,113,.30); }
+
+    /* ---------- demo (single-task card) ---------- */
+    .demo { padding: 96px 0 48px; }
+    .demo-head { max-width: 760px; margin-bottom: 32px; }
+    .demo-head .pill { margin-bottom: 16px; }
+    .task-card {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .task-card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .task-meta { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .task-anchor {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.25);
+      color: #c0b6ff;
+      flex-shrink: 0;
+    }
+    .task-title {
+      font-size: 15px;
+      color: var(--text);
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .task-stats {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      font-size: 13.5px;
+      color: var(--text);
+    }
+    .stat-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-mute);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+    .task-prompt {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(255,255,255,.015);
+    }
+    .task-prompt-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-mute);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-right: 10px;
+    }
+    .task-prompt p {
+      display: inline;
+      margin: 0;
+      color: var(--text);
+      font-size: 14.5px;
+      font-style: italic;
+    }
+    .trace-list {
+      display: flex; flex-direction: column;
+    }
+    .trace {
+      display: grid;
+      grid-template-columns: 60px 130px 70px 1fr 80px;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--line-soft);
+      transition: background .15s ease;
+    }
+    .trace:hover { background: rgba(139,124,255,.04); }
+    .trace:last-child { border-bottom: 0; }
+    .trace-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-mute);
+    }
+    .trace-detail { color: var(--text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .trace-detail code {
+      font-size: 12.5px;
+      padding: 1px 6px;
+    }
+    .trace-cost { color: var(--text); text-align: right; font-size: 12.5px; }
+    .t-kind {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid;
+    }
+    .kind-ask  { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .kind-read { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .kind-edit { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .kind-bash { background: rgba(52,211,153,.10);  color: #6ee7b7; border-color: rgba(52,211,153,.30); }
+
+    .task-foot {
+      display: grid;
+      grid-template-columns: repeat(3, auto) 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 18px 24px;
+      background: rgba(139,124,255,.04);
+      border-top: 1px solid var(--line-soft);
+      font-size: 13.5px;
+    }
+    .task-foot-stat {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text);
+    }
+    .task-foot-stat .stat-v { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+    .task-foot-note {
+      color: var(--text-soft);
+      font-size: 12.5px;
+      text-align: right;
+    }
+
+    /* ---------- teams ---------- */
+    .teams { padding: 96px 0 48px; }
+    .teams-head { max-width: 760px; margin-bottom: 8px; }
+    .teams-head .pill { margin-bottom: 16px; }
+
+    /* ---------- tabs ---------- */
+    .tabs-bar {
+      display: inline-flex;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      margin: 20px 0 36px;
+      gap: 4px;
+    }
+    .tab-btn {
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      background: transparent;
+      border: 0;
+      color: var(--text-soft);
+      padding: 9px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      background: linear-gradient(180deg, rgba(139,124,255,.18), rgba(139,124,255,.06));
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(139,124,255,.35);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn .28s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ---------- personas grids ---------- */
+    .personas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .personas-solo {
+      grid-template-columns: minmax(0, 720px);
+      justify-content: center;
+    }
+    .personas-team {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .persona {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .persona::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .p-dev::before  { background: linear-gradient(90deg, #38bdf8, transparent); }
+    .p-lead::before { background: linear-gradient(90deg, #8b7cff, transparent); }
+    .p-mgr::before  { background: linear-gradient(90deg, #fbbf24, transparent); }
+    .p-own::before  { background: linear-gradient(90deg, #34d399, transparent); }
+    .persona:hover { transform: translateY(-2px); border-color: rgba(139,124,255,.35); }
+    .persona-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 14px;
+    }
+    .persona-icon {
+      width: 42px; height: 42px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .p-dev  .persona-icon { background: rgba(56,189,248,.10);  color: #7cd4fd; border-color: rgba(56,189,248,.30); }
+    .p-lead .persona-icon { background: rgba(139,124,255,.10); color: #c0b6ff; border-color: rgba(139,124,255,.30); }
+    .p-mgr  .persona-icon { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
+    .p-own  .persona-icon { background: rgba(52,211,153,.10);  color: #6ee7b7; border-color: rgba(52,211,153,.30); }
+    .persona-head h3 { font-size: 17px; margin: 0 0 2px; letter-spacing: -.01em; }
+    .persona-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin: 0;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .persona-sub {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin: 4px 0 18px;
+    }
+    .persona-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .persona-list li {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      padding-left: 18px;
+      position: relative;
+    }
+    .persona-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: .65;
+    }
+    .p-dev  .persona-list li::before { background: #38bdf8; }
+    .p-lead .persona-list li::before { background: #8b7cff; }
+    .p-mgr  .persona-list li::before { background: #fbbf24; }
+    .p-own  .persona-list li::before { background: #34d399; }
+    .persona-list b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ---------- drill-down strip ---------- */
+    .drill {
+      margin-top: 36px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 28px 24px;
+    }
+    .drill-title {
+      font-size: 16px;
+      margin: 0 0 18px;
+      letter-spacing: -.005em;
+      color: var(--text);
+    }
+    .drill-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .drill-step {
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+    .drill-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: .14em;
+    }
+    .drill-step h4 {
+      font-size: 14px;
+      margin: 6px 0 6px;
+      letter-spacing: -.005em;
+    }
+    .drill-step p {
+      font-size: 12.5px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .drill-arrow {
+      align-self: center;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      opacity: .55;
+    }
+
+    .teams-cta {
+      margin-top: 28px;
+      background: linear-gradient(180deg, rgba(139,124,255,.06), rgba(139,124,255,.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 26px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .teams-cta-text h3 { font-size: 15px; margin: 0 0 4px; letter-spacing: -.005em; }
+    .teams-cta-text p { font-size: 13.5px; color: var(--text-soft); margin: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #d6d0ff;
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.25);
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+
+    /* ---------- footer ---------- */
+    .foot {
+      border-top: 1px solid var(--line-soft);
+      padding: 40px 0;
+      margin-top: 32px;
+    }
+    .foot-inner {
+      max-width: 1180px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      color: var(--text-mute);
+      font-size: 13.5px;
+    }
+    .foot-brand { display: inline-flex; align-items: center; gap: 10px; }
+    .foot-tag { color: var(--text-mute); }
+    .foot-links { display: flex; gap: 20px; }
+    .foot-links a:hover { color: var(--text); }
+    .foot-meta { display: inline-flex; align-items: center; gap: 10px; }
+
+    /* ---------- toast ---------- */
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--panel);
+      border: 1px solid rgba(139,124,255,.4);
+      box-shadow: var(--shadow);
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--text);
+      max-width: 340px;
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .25s ease, opacity .25s ease;
+      z-index: 100;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+    /* ---------- responsive ---------- */
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 0 32px; }
+      .terminal { transform: none; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .limits { grid-template-columns: 1fr; }
+      .personas, .personas-team { grid-template-columns: 1fr; }
+      .personas-solo { grid-template-columns: 1fr; }
+      .pillar-grid { grid-template-columns: 1fr; }
+      .pillars { padding: 56px 0 16px; }
+      .md-kpis { grid-template-columns: repeat(2, 1fr); }
+      .md-table thead th { font-size: 9.5px; padding: 8px 10px; }
+      .md-table tbody td { padding: 9px 10px; font-size: 12px; }
+      .teams { padding: 64px 0 24px; }
+      .teams-cta { flex-direction: column; align-items: flex-start; }
+      .drill-row { grid-template-columns: 1fr; }
+      .drill-arrow { transform: rotate(90deg); justify-self: center; }
+      .drill { padding: 22px 18px; }
+      .privacy-inner { padding: 32px 24px; }
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .md-kpis { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .md-kpi { padding: 12px; }
+      .md-kpi-v { font-size: 18px; }
+      .md-toggle { width: 100%; justify-content: space-between; }
+      .md-pill { flex: 1; padding: 6px 8px; text-align: center; }
+      .md-head { padding: 10px 12px; }
+      .md-body { padding: 14px 12px 4px; }
+      .md-table { display: block; overflow-x: auto; }
+      .md-table thead th { white-space: nowrap; }
+      .md-banner { font-size: 12px; }
+      .features, .how { padding: 64px 0 16px; }
+      .cta { padding: 64px 0; }
+      .row { grid-template-columns: 1.4fr .8fr .6fr .6fr; padding: 10px 14px; font-size: 12.5px; gap: 6px; }
+      .trace {
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "tool   time"
+          "detail detail"
+          "kind   cost";
+        row-gap: 4px;
+        padding: 12px 14px;
+        font-size: 12.5px;
+      }
+      .trace-time { grid-area: time; text-align: right; font-size: 11px; }
+      .trace-tool { grid-area: tool; }
+      .trace-action { grid-area: kind; }
+      .trace-detail {
+        grid-area: detail;
+        font-size: 12px;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        word-break: break-word;
+      }
+      .trace-cost { grid-area: cost; text-align: right; font-size: 12px; }
+      .task-stats { gap: 10px; font-size: 12px; }
+      .task-card-head { padding: 16px 18px; }
+      .task-prompt { padding: 14px 18px; }
+      .task-prompt p { font-size: 13px; }
+      .task-prompt-label { display: block; margin-bottom: 6px; }
+      .task-title { white-space: normal; }
+      .task-foot { grid-template-columns: 1fr; gap: 8px; padding: 14px 18px; }
+      .task-foot-note { text-align: left; }
+      .demo { padding: 64px 0 24px; }
+      .terminal { transform: none; }
+      .terminal-body { font-size: 12.5px; }
+      .nav-inner { padding: 12px 16px; gap: 8px; }
+      .brand-name { font-size: 14px; }
+      main { padding: 0 16px; }
+      .foot-inner { padding: 0 16px; }
+      .code { font-size: 12px; padding: 12px 14px; }
+      .badge { font-size: 10.5px; padding: 2px 7px; }
+      .foot-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="glow glow-1" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+  <div class="glow glow-3" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">◢◤</span>
+        <span class="brand-name">tracepilot</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#pillars">Pillars</a>
+        <a href="#demo">Demo</a>
+        <a href="#teams">For teams</a>
+        <a href="#privacy">Privacy</a>
+        <a class="nav-cta" href="#waitlist">Get early access</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Coming soon · private beta
+        </span>
+        <h1 class="hero-title">
+          The local AI tracker<br/>
+          <span class="grad">for teams.</span>
+        </h1>
+        <p class="hero-sub">
+          Every prompt, every dollar, every task your whole team spends on AI —
+          across <span class="hl">Claude Code</span>, <span class="hl">Cursor</span>,
+          <span class="hl">ChatGPT</span>, <span class="hl">Claude.ai</span>,
+          <span class="hl">Perplexity</span>, and <span class="hl">Gemini</span>.
+          Runs on your machines. <span class="hl">Nothing leaves them.</span>
+        </p>
+
+        <form class="waitlist" autocomplete="off">
+          <input type="email" name="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
+          <button type="submit">
+            <span>Join waitlist</span>
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h12m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+        <p class="waitlist-note">No spam. One email when the beta opens.</p>
+
+        <div class="hero-meta">
+          <span><span class="dot dot-g"></span> macOS</span>
+          <span><span class="dot dot-g"></span> Windows</span>
+          <span><span class="dot dot-g"></span> Linux</span>
+          <span class="sep">·</span>
+          <span class="mono">single Rust binary</span>
+        </div>
+      </div>
+
+      <div class="terminal" role="img" aria-label="Tracepilot dashboard preview">
+        <div class="terminal-top">
+          <span class="tdot tdot-r"></span>
+          <span class="tdot tdot-y"></span>
+          <span class="tdot tdot-g"></span>
+          <span class="terminal-title">tracepilot · localhost:4321</span>
+        </div>
+        <div class="terminal-body">
+          <div class="row row-head">
+            <span>task</span>
+            <span>tool</span>
+            <span>tokens</span>
+            <span>cost</span>
+          </div>
+          <div class="row">
+            <span class="t-name">Refactor stitcher to use SeenStore</span>
+            <span class="badge b-claude">Claude Code</span>
+            <span class="mono">42.1k</span>
+            <span class="mono">$0.18</span>
+          </div>
+          <div class="row">
+            <span class="t-name">Investigate slow /api/tasks query</span>
+            <span class="badge b-cursor">Cursor</span>
+            <span class="mono">8.4k</span>
+            <span class="mono">~$0.04</span>
+          </div>
+          <div class="row">
+            <span class="t-name">Write landing page copy</span>
+            <span class="badge b-copilot">Copilot</span>
+            <span class="mono">1.9k</span>
+            <span class="mono">$0.01</span>
+          </div>
+          <div class="row">
+            <span class="t-name">Debug 401 from OTA dashboard</span>
+            <span class="badge b-antigrav">Antigravity</span>
+            <span class="mono">12.0k</span>
+            <span class="mono">$0.06</span>
+          </div>
+          <div class="row row-total">
+            <span>today</span>
+            <span></span>
+            <span class="mono">64.4k</span>
+            <span class="mono">$0.29</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pillars" class="pillars">
+      <div class="pillars-head">
+        <h2 class="section-title">Three things, done in one place.</h2>
+        <p class="section-sub">Tracepilot pulls every dev's AI work — chats, edits, tool calls — into one local store. Then surfaces the three views that actually move the needle.</p>
+      </div>
+
+      <div class="pillar-grid">
+        <div class="pillar p-team">
+          <div class="pillar-icon">◇</div>
+          <div class="pillar-tag">Team-wide</div>
+          <h3>Every dev. Every dollar.</h3>
+          <p>One number for the org, then drill into any developer, ticket, or task. Rework rate, cache hit, forecast — surfaced per dev, per week.</p>
+          <ul class="pillar-list">
+            <li>Per-dev spend &amp; rework</li>
+            <li>$ per Jira / Linear ticket</li>
+            <li>End-of-month forecast</li>
+            <li>Anomaly alerts to Slack</li>
+          </ul>
+        </div>
+
+        <div class="pillar p-local">
+          <div class="pillar-icon">◉</div>
+          <div class="pillar-tag">Local-first</div>
+          <h3>Nothing leaves your machines.</h3>
+          <p>Tracepilot is a local daemon. No cloud. No analytics endpoint. No env vars. No proxy in default mode. <code>tracepilot uninstall</code> removes it all.</p>
+          <ul class="pillar-list">
+            <li>SQLite at <code>~/.tracepilot/</code></li>
+            <li>Reads each tool's local store</li>
+            <li>No keystrokes, no screen capture</li>
+            <li>Clipboard hashed before storage</li>
+          </ul>
+        </div>
+
+        <div class="pillar p-task">
+          <div class="pillar-icon">◆</div>
+          <div class="pillar-tag">Task-level</div>
+          <h3>Cost, insights &amp; full trace.</h3>
+          <p>Every prompt, every tool call, every file edit, every model swap — stitched across all your AI tools into one task with cache-aware pricing.</p>
+          <ul class="pillar-list">
+            <li>Cache-aware Anthropic pricing</li>
+            <li>Cross-tool task stitching</li>
+            <li>Click-through to the trail</li>
+            <li>Web research batched w/ code</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <h2 class="section-title">How it stays local.</h2>
+      <p class="section-sub">Tracepilot reads each tool's local transcript store. No proxy, no CA cert, no env vars — just a daemon and a dashboard at <code>localhost:4321</code>.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">◇</div>
+          <h3>Local-first by default</h3>
+          <p>SQLite at <code>~/.tracepilot/traces.db</code>. Dashboard at <code>localhost:4321</code>. Your data never leaves your machine.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◈</div>
+          <h3>Multi-tool, one view</h3>
+          <p>Claude Code JSONL, Cursor SQLite, Copilot logs, and Antigravity — unified into one timeline of <span class="hl">tasks</span>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◉</div>
+          <h3>Cache-aware pricing</h3>
+          <p>Anthropic ephemeral 5m/1h cache writes and reads priced correctly. Per-task token and dollar totals you can trust.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◊</div>
+          <h3>Zero setup mode</h3>
+          <p>Default mode is pure file-watching. No MITM proxy, no certificate dance. Just run <code>tracepilot start</code>.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◍</div>
+          <h3>Optional live capture</h3>
+          <p>Want raw network traces too? <code>tracepilot proxy enable</code> spins up an opt-in HTTPS MITM, fully reversible.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◐</div>
+          <h3>Single binary</h3>
+          <p>One Rust binary per platform. No Electron. No Tauri. The UI is plain HTTP served to your browser of choice.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">◑</div>
+          <h3>Web research, batched.</h3>
+          <p>ChatGPT, Claude.ai, Perplexity, Gemini — when you research <em>then</em> build, Tracepilot batches the chat turns with the code edits into <span class="hl">one task</span>. See the real cost of getting from question to PR.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo">
+      <div class="demo-head">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Live demo
+        </span>
+        <h2 class="section-title">Research and code, in the same task.</h2>
+        <p class="section-sub">Tracepilot reads your AI chat tabs, your editor's transcript, and your CLI agent's JSONL — then groups everything sharing a branch, ticket, or file into one task. Click any row to see the full trail.</p>
+      </div>
+
+      <div class="task-card">
+        <div class="task-card-head">
+          <div class="task-meta">
+            <span class="task-anchor">CHESS-412</span>
+            <span class="task-title">Wire OTA phone-OTP login end-to-end</span>
+          </div>
+          <div class="task-stats">
+            <span><span class="stat-k">duration</span> 47m</span>
+            <span><span class="stat-k">traces</span> 9</span>
+            <span><span class="stat-k">tokens</span> 38.4k</span>
+            <span><span class="stat-k">cost</span> $0.42</span>
+          </div>
+        </div>
+
+        <div class="task-prompt">
+          <span class="task-prompt-label">prompt</span>
+          <p>"add OTA dashboard phone-OTP login — Twilio for SMS, Django session cookies, then wire the Remix dashboard redirect after verify"</p>
+        </div>
+
+        <div class="trace-list">
+          <div class="trace">
+            <div class="trace-time">09:12</div>
+            <div class="trace-tool"><span class="badge b-claude">Claude.ai</span></div>
+            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+            <div class="trace-detail">"how do Django session cookies work with OTP-based auth?"</div>
+            <div class="trace-cost mono">$0.04</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:15</div>
+            <div class="trace-tool"><span class="badge b-pplx">Perplexity</span></div>
+            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+            <div class="trace-detail">"Twilio Verify API quickstart Python"</div>
+            <div class="trace-cost mono">$0.02</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:21</div>
+            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
+            <div class="trace-action"><span class="t-kind kind-read">read</span></div>
+            <div class="trace-detail"><code>chess-be/ota/views.py</code></div>
+            <div class="trace-cost mono">$0.06</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:24</div>
+            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
+            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+            <div class="trace-detail"><code>ota/views.py</code> · <code>ota/serializers.py</code></div>
+            <div class="trace-cost mono">$0.11</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:33</div>
+            <div class="trace-tool"><span class="badge b-cgpt">ChatGPT</span></div>
+            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+            <div class="trace-detail">"expo-router redirect after server response — guard pattern?"</div>
+            <div class="trace-cost mono">$0.03</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:38</div>
+            <div class="trace-tool"><span class="badge b-cursor">Cursor</span></div>
+            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+            <div class="trace-detail"><code>circlechess-app-ota/web/auth.tsx</code></div>
+            <div class="trace-cost mono">~$0.09</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:46</div>
+            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
+            <div class="trace-action"><span class="t-kind kind-bash">bash</span></div>
+            <div class="trace-detail"><code>pytest chess-be/ota/tests/</code></div>
+            <div class="trace-cost mono">$0.05</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:54</div>
+            <div class="trace-tool"><span class="badge b-gem">Gemini</span></div>
+            <div class="trace-action"><span class="t-kind kind-ask">ask</span></div>
+            <div class="trace-detail">"why does Twilio Verify return 60200?"</div>
+            <div class="trace-cost mono">$0.01</div>
+          </div>
+          <div class="trace">
+            <div class="trace-time">09:59</div>
+            <div class="trace-tool"><span class="badge b-claude">Claude Code</span></div>
+            <div class="trace-action"><span class="t-kind kind-edit">edit</span></div>
+            <div class="trace-detail"><code>ota/twilio_client.py</code> — fix country-code prefix</div>
+            <div class="trace-cost mono">$0.01</div>
+          </div>
+        </div>
+
+        <div class="task-foot">
+          <div class="task-foot-stat">
+            <span class="stat-k">research</span>
+            <span class="stat-v">4 turns · $0.10</span>
+          </div>
+          <div class="task-foot-stat">
+            <span class="stat-k">build</span>
+            <span class="stat-v">5 turns · $0.32</span>
+          </div>
+          <div class="task-foot-stat">
+            <span class="stat-k">ratio</span>
+            <span class="stat-v">research → code in 12m</span>
+          </div>
+          <div class="task-foot-note">
+            Without batching: 9 unrelated rows in 4 different tools. With Tracepilot: one task, one anchor, one cost.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="how">
+      <h2 class="section-title">Three steps. Then forget it's running.</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">01</div>
+          <h3>Install</h3>
+<pre class="code"><span class="prompt">$</span> curl -sSL tracepilot.dev/install | sh</pre>
+        </div>
+        <div class="step">
+          <div class="step-n">02</div>
+          <h3>Start</h3>
+<pre class="code"><span class="prompt">$</span> tracepilot start
+<span class="muted">→ watching ~/.claude/projects/</span>
+<span class="muted">→ watching Cursor workspaceStorage</span>
+<span class="muted">→ dashboard at http://localhost:4321</span></pre>
+        </div>
+        <div class="step">
+          <div class="step-n">03</div>
+          <h3>Open the dashboard</h3>
+<pre class="code"><span class="prompt">$</span> open http://localhost:4321</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="teams" class="teams">
+      <div class="teams-head">
+        <span class="pill">
+          <span class="pill-dot"></span>
+          Built for solos &amp; teams
+        </span>
+        <h2 class="section-title">One trace stream. Every lens you need.</h2>
+        <p class="section-sub">Whether you're a solo dev getting sharper, or a team that needs visibility across engineers, leads, and budget — same data, different views.</p>
+        <div class="tabs-bar" role="tablist">
+          <button class="tab-btn" role="tab" aria-selected="false" data-tab="solo">For individuals</button>
+          <button class="tab-btn active" role="tab" aria-selected="true" data-tab="team">For teams</button>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-solo" role="tabpanel" hidden>
+        <div class="personas personas-solo">
+          <div class="persona p-dev">
+            <div class="persona-head">
+              <div class="persona-icon">◆</div>
+              <div>
+                <h3>For individual developers</h3>
+                <p class="persona-tag">My Coaching</p>
+              </div>
+            </div>
+            <p class="persona-sub">Spot your own patterns before anyone else does. Self-coaching, no team required.</p>
+            <ul class="persona-list">
+              <li><b>Rework rate.</b> How often your follow-up prompt says "fix / broken / wrong".</li>
+              <li><b>Cache hit ratio.</b> How much context you're paying to re-send each turn.</li>
+              <li><b>First-prompt success.</b> Tasks closed in one human turn vs many.</li>
+              <li><b>Hour-of-day cost curve.</b> When you spend most — and whether tired hours are expensive hours.</li>
+              <li><b>Top expensive tasks.</b> Click into any task to see the prompt, the tool calls, and the cost trail.</li>
+              <li><b>Model fit.</b> Opus on a Read-only task is overkill — see the cheaper equivalent.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="previews">
+          <div class="preview">
+            <div class="preview-head">
+              <div class="preview-title">
+                <span class="preview-tag">Developer view</span>
+                <h4>My AI Coaching</h4>
+              </div>
+              <span class="preview-pill pp-dev">self-coaching</span>
+            </div>
+            <div class="preview-img-wrap">
+              <img src="assets/dev.png" alt="Tracepilot developer dashboard showing rework rate, cache hit, top expensive tasks, hour-of-day spend, correction streaks" loading="lazy" onerror="this.outerHTML='&lt;div class=ph&gt;dev dashboard preview&lt;/div&gt;'" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel active" id="tab-team" role="tabpanel">
+        <div class="personas personas-team">
+          <div class="persona p-lead">
+            <div class="persona-head">
+              <div class="persona-icon">◇</div>
+              <div>
+                <h3>For tech leads</h3>
+                <p class="persona-tag">Team Quality</p>
+              </div>
+            </div>
+            <p class="persona-sub">Coach the team with data, not vibes.</p>
+            <ul class="persona-list">
+              <li><b>Per-dev quality table.</b> Spend, rework, cache hit, top tool — at a glance.</li>
+              <li><b>Top expensive tasks.</b> Postmortem queue. Click any row → full trail.</li>
+              <li><b>Repeated knowledge gaps.</b> Same question 3+ times = a missing doc.</li>
+              <li><b>Skill &amp; subagent adoption.</b> Who's leveraging parallel agents and reviews.</li>
+            </ul>
+          </div>
+
+          <div class="persona p-mgr">
+            <div class="persona-head">
+              <div class="persona-icon">◈</div>
+              <div>
+                <h3>For managers</h3>
+                <p class="persona-tag">Org &amp; Budget · team scope</p>
+              </div>
+            </div>
+            <p class="persona-sub">Aggregate first, drill into any dev or ticket without leaving the page.</p>
+            <ul class="persona-list">
+              <li><b>Spend per dev, per week.</b> Burndown chart. Click → that dev's coaching.</li>
+              <li><b>Spend per Jira / Linear ticket.</b> $/story-point attribution.</li>
+              <li><b>End-of-month forecast.</b> Know before finance asks.</li>
+              <li><b>Anomaly alerts.</b> 3σ-above-baseline spikes pinged to Slack.</li>
+            </ul>
+          </div>
+
+          <div class="persona p-own">
+            <div class="persona-head">
+              <div class="persona-icon">◉</div>
+              <div>
+                <h3>For owners</h3>
+                <p class="persona-tag">Org &amp; Budget · full scope</p>
+              </div>
+            </div>
+            <p class="persona-sub">Defend the AI budget. Every dollar attributed, every paid tool justified.</p>
+            <ul class="persona-list">
+              <li><b>Org-wide burndown.</b> All teams, all repos, all paid tools.</li>
+              <li><b>Cache-saved $.</b> Concrete savings caching gives you, weekly.</li>
+              <li><b>Tool subscription justification.</b> Auto-suggest keep / downgrade / drop.</li>
+              <li><b>$/PR proxy.</b> Cost-per-shipped-PR when anchors match merges.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="drill">
+          <h3 class="drill-title">How the drill-down works</h3>
+          <div class="drill-row">
+            <div class="drill-step">
+              <span class="drill-n">01</span>
+              <h4>Org &amp; Budget</h4>
+              <p>Owners and managers land here. Total spend, forecast, cache-saved $, model mix, anomaly feed.</p>
+            </div>
+            <div class="drill-arrow">→</div>
+            <div class="drill-step">
+              <span class="drill-n">02</span>
+              <h4>Team Quality</h4>
+              <p>Click any dev row, ticket, or anomaly. Lands on the team table with that row highlighted.</p>
+            </div>
+            <div class="drill-arrow">→</div>
+            <div class="drill-step">
+              <span class="drill-n">03</span>
+              <h4>My Coaching</h4>
+              <p>Click the dev. See their full coaching dashboard read-only. Their rework streaks, their hour-of-day, their top tasks.</p>
+            </div>
+            <div class="drill-arrow">→</div>
+            <div class="drill-step">
+              <span class="drill-n">04</span>
+              <h4>Task detail</h4>
+              <p>Click any task. Full prompt, every tool call, every model swap, the cost trail end-to-end.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="minidash" data-role="manager">
+          <div class="md-head">
+            <div class="md-title">
+              <span class="md-mark">◢◤</span>
+              <span class="md-name mono">tracepilot · circle-chess</span>
+              <span class="md-demo">demo data</span>
+            </div>
+            <div class="md-toggle" role="tablist">
+              <button class="md-pill" role="tab" data-role="lead"    aria-selected="false">Lead</button>
+              <button class="md-pill active" role="tab" data-role="manager" aria-selected="true">Manager</button>
+              <button class="md-pill" role="tab" data-role="owner"   aria-selected="false">Owner</button>
+            </div>
+          </div>
+
+          <div class="md-body">
+            <div class="md-kpis" id="md-kpis"></div>
+            <div class="md-banner" id="md-banner"></div>
+            <table class="md-table"><thead id="md-thead"></thead><tbody id="md-tbody"></tbody></table>
+          </div>
+        </div>
+
+        <div class="teams-cta">
+          <div class="teams-cta-text">
+            <h3>Shipping first in the team beta</h3>
+            <p>The highest-leverage insights landing in v1.</p>
+          </div>
+          <div class="chips">
+            <span class="chip">Top-N expensive tasks</span>
+            <span class="chip">Rework rate per dev</span>
+            <span class="chip">Cache hit ratio</span>
+            <span class="chip">Anchor coverage %</span>
+            <span class="chip">Cache-saved $</span>
+            <span class="chip">Model-mix simulator</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy" class="privacy">
+      <div class="privacy-inner">
+        <h2 class="section-title">Privacy isn't a feature. It's the architecture.</h2>
+        <p class="section-sub">Tracepilot is local. There is no Tracepilot cloud. There is no analytics endpoint. The daemon never opens a socket to anything we own.</p>
+
+        <ul class="limits">
+          <li><span class="lim-x">×</span> No keystroke logging. Ever.</li>
+          <li><span class="lim-x">×</span> No screen capture. Ever.</li>
+          <li><span class="lim-x">×</span> Clipboard text hashed before storage. Raw text never persisted.</li>
+          <li><span class="lim-check">✓</span> Prompts only read from sources you already have locally.</li>
+          <li><span class="lim-check">✓</span> Everything under <code>~/.tracepilot/</code>.</li>
+          <li><span class="lim-check">✓</span> <code>tracepilot uninstall</code> removes it all.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="waitlist" class="cta">
+      <h2>Get notified when the beta opens.</h2>
+      <p>We're polishing the rough edges with a small group. Drop your email — we'll send one message, when it's ready.</p>
+      <form class="waitlist waitlist-lg" autocomplete="off">
+        <input type="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
+        <button type="submit">
+          <span>Join waitlist</span>
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h12m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <span class="brand-mark">◢◤</span>
+        <span class="brand-name">tracepilot</span>
+        <span class="foot-tag">· local AI tracker for teams</span>
+      </div>
+      <div class="foot-links">
+        <a href="#pillars">Pillars</a>
+        <a href="#teams">For teams</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#waitlist">Waitlist</a>
+        <a href="/">← main site</a>
+      </div>
+      <div class="foot-meta">
+        <span>© 2026 Tracepilot</span>
+        <span class="sep">·</span>
+        <span class="mono">built in Rust</span>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      // Set this to your form endpoint to enable real submissions.
+      // Formspree: 'https://formspree.io/f/xxxxxxx'
+      // Web3Forms: 'https://api.web3forms.com/submit'  (also set WAITLIST_KEY)
+      var WAITLIST_ENDPOINT = 'https://formspree.io/f/xnjrndop';
+      var WAITLIST_KEY = '';
+
+      var forms = document.querySelectorAll('form.waitlist');
+      var toast = document.getElementById('toast');
+      var timer;
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('show'); }, 3600);
+      }
+
+      function submitToEndpoint(email) {
+        var body;
+        var headers = { 'Accept': 'application/json' };
+        if (WAITLIST_ENDPOINT.indexOf('web3forms') !== -1) {
+          headers['Content-Type'] = 'application/json';
+          body = JSON.stringify({
+            access_key: WAITLIST_KEY,
+            email: email,
+            subject: 'New Tracepilot waitlist signup',
+            from_name: 'Tracepilot waitlist',
+            source: 'tracepilot.in'
+          });
+        } else {
+          headers['Content-Type'] = 'application/json';
+          body = JSON.stringify({
+            email: email,
+            _subject: 'New Tracepilot waitlist signup',
+            source: 'tracepilot.in'
+          });
+        }
+        return fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: headers, body: body });
+      }
+
+      forms.forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var input = form.querySelector('input[type=email]');
+          var btn = form.querySelector('button[type=submit]');
+          var email = input.value.trim();
+          if (!email) return;
+          if (!WAITLIST_ENDPOINT) {
+            input.value = '';
+            showToast("You're on the list. We'll email when the beta opens.");
+            return;
+          }
+          if (btn) { btn.disabled = true; btn.style.opacity = '.7'; }
+          submitToEndpoint(email)
+            .then(function (r) {
+              if (!r.ok) throw new Error('bad status ' + r.status);
+              input.value = '';
+              showToast("You're on the list. We'll email when the beta opens.");
+            })
+            .catch(function () {
+              showToast("Couldn't reach our server. Try again in a moment.");
+            })
+            .finally(function () {
+              if (btn) { btn.disabled = false; btn.style.opacity = ''; }
+            });
+        });
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          var id = a.getAttribute('href');
+          if (id.length > 1) {
+            var el = document.querySelector(id);
+            if (el) {
+              var emailInput = el.querySelector('input[type=email]');
+              if (emailInput) setTimeout(function () { emailInput.focus({ preventScroll: true }); }, 700);
+            }
+          }
+        });
+      });
+
+      var tabButtons = document.querySelectorAll('.tab-btn');
+      var tabPanels = document.querySelectorAll('.tab-panel');
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var target = btn.getAttribute('data-tab');
+          tabButtons.forEach(function (b) {
+            var on = b.getAttribute('data-tab') === target;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          tabPanels.forEach(function (p) {
+            var on = p.id === 'tab-' + target;
+            p.classList.toggle('active', on);
+            if (on) p.removeAttribute('hidden');
+            else p.setAttribute('hidden', '');
+          });
+        });
+      });
+
+      // -------- mini dashboard (role-switching) --------
+      var ROLE_DATA = {
+        lead: {
+          kpis: [
+            { v: '64%',  l: 'anchor coverage', d: '36% of work has no ticket' },
+            { v: '28%',  l: 'team rework',     d: 'p90 41% · median 24%' },
+            { v: '41%',  l: 'skill adoption',  d: 'tasks invoking a skill' },
+            { v: '1.3',  l: 'subagent fanout', d: 'avg parallel Agent()/task' }
+          ],
+          banner: '<b>Watch:</b> Two devs (haricharan, balaji) sit above p90 rework. Both first time on <code>nscl-mission</code> — schedule a 30-min pair session.',
+          head: [
+            { t: 'developer', cls: '' },
+            { t: 'spend',     cls: 'num' },
+            { t: 'rework',    cls: 'num' },
+            { t: 'cache hit', cls: 'num' },
+            { t: 'top tool',  cls: '' }
+          ],
+          rows: [
+            { cells: ['saumitra',   { v: '$48.20', cls: 'num' }, { v: '22%', cls: 'num warn' }, { v: '71%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] },
+            { cells: ['nitendra',   { v: '$54.10', cls: 'num' }, { v: '14%', cls: 'num good' }, { v: '78%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] },
+            { cells: ['abhijeet',   { v: '$33.50', cls: 'num' }, { v: '29%', cls: 'num warn' }, { v: '61%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(96,165,250,.30);background:rgba(96,165,250,.10);color:#93c5fd;">gemini-web</span>'] },
+            { cells: ['haricharan', { v: '$71.30', cls: 'num' }, { v: '44%', cls: 'num bad' },  { v: '42%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(139,124,255,.30);background:rgba(139,124,255,.10);color:#c0b6ff;">cursor</span>'] },
+            { cells: ['balaji',     { v: '$38.40', cls: 'num' }, { v: '41%', cls: 'num bad' },  { v: '48%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(139,124,255,.30);background:rgba(139,124,255,.10);color:#c0b6ff;">cursor</span>'] },
+            { cells: ['shivam',     { v: '$25.00', cls: 'num' }, { v: '11%', cls: 'num good' }, { v: '82%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] }
+          ]
+        },
+        manager: {
+          kpis: [
+            { v: '$312',   l: 'this week',   d: '▼ 8% vs last week' },
+            { v: '$1,420', l: 'forecast',    d: 'within $1,800 cap' },
+            { v: '$184',   l: 'cache-saved', d: '37% of gross input' },
+            { v: '79%',    l: 'plan util',   d: 'Claude Code 7/8 seats' }
+          ],
+          banner: '<b>This week\'s win:</b> Cache saved $184 — more than the entire Cursor seat bill. Push prompt-caching to the two devs below 50% hit.',
+          head: [
+            { t: 'ticket', cls: '' },
+            { t: 'title',  cls: '' },
+            { t: 'ai $',   cls: 'num' },
+            { t: 'pts',    cls: 'num' },
+            { t: '$/pt',   cls: 'num' }
+          ],
+          rows: [
+            { cells: ['CHESS-412', 'Pawn promotion regression', { v: '$48.20', cls: 'num' }, { v: '3', cls: 'num' }, { v: '$16.07', cls: 'num' }] },
+            { cells: ['NSCL-188',  'Battle socket reconnect',   { v: '$44.10', cls: 'num' }, { v: '5', cls: 'num' }, { v: '$8.82',  cls: 'num' }] },
+            { cells: ['NSCL-201',  'Mission streak rework',     { v: '$71.30', cls: 'num' }, { v: '2', cls: 'num' }, { v: '$35.65', cls: 'num bad' }] },
+            { cells: ['MAST-44',   'Mastery payment race',      { v: '$22.40', cls: 'num' }, { v: '3', cls: 'num' }, { v: '$7.47',  cls: 'num' }] },
+            { cells: ['OTA-12',    'OTA phone-OTP login',       { v: '$18.10', cls: 'num' }, { v: '5', cls: 'num' }, { v: '$3.62',  cls: 'num good' }] }
+          ]
+        },
+        owner: {
+          kpis: [
+            { v: '$1,420', l: 'org month',     d: '7 devs · 4 paid tools' },
+            { v: '$184',   l: 'cache-saved',   d: 'covers Cursor seats' },
+            { v: '79%',    l: 'plan util',     d: 'Claude Code 7/8' },
+            { v: '4.1σ',  l: 'anomalies', d: 'haricharan spike · 24h' }
+          ],
+          banner: '<b>Anomaly:</b> haricharan $42.10 in last 24h — 4.1σ above 14-day baseline. Three tasks &gt; $10 on <code>nscl-mission</code>. Routed to akshay, cc’d gaurav.',
+          head: [
+            { t: 'tool',     cls: '' },
+            { t: 'seats',    cls: 'num' },
+            { t: 'cost',     cls: 'num' },
+            { t: '$ via',    cls: 'num' },
+            { t: 'verdict',  cls: '' }
+          ],
+          rows: [
+            { cells: ['Claude Code',    { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$1,180', cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] },
+            { cells: ['Cursor',         { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$220',   cls: 'num' }, '<span class="md-pill-mini verdict-downgrade">downgrade</span>'] },
+            { cells: ['ChatGPT Team',   { v: '5',  cls: 'num' }, { v: '$150', cls: 'num' }, { v: '$48',    cls: 'num' }, '<span class="md-pill-mini verdict-drop">drop</span>'] },
+            { cells: ['Gemini Advanced',{ v: '3',  cls: 'num' }, { v: '$60',  cls: 'num' }, { v: '$92',    cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] }
+          ]
+        }
+      };
+
+      var minidash = document.querySelector('.minidash');
+      var mdKpis   = document.getElementById('md-kpis');
+      var mdBanner = document.getElementById('md-banner');
+      var mdThead  = document.getElementById('md-thead');
+      var mdTbody  = document.getElementById('md-tbody');
+
+      function escapeText(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]; }); }
+
+      function cellHTML(c) {
+        if (typeof c === 'string') return '<td>' + c + '</td>';
+        return '<td class="' + (c.cls || '') + '">' + (c.v != null ? c.v : '') + '</td>';
+      }
+
+      function paint(role) {
+        var d = ROLE_DATA[role];
+        if (!d) return;
+        mdKpis.innerHTML = d.kpis.map(function (k) {
+          return '<div class="md-kpi"><div class="md-kpi-v">' + k.v + '</div><div class="md-kpi-l">' + k.l + '</div>' + (k.d ? '<div class="md-kpi-d">' + k.d + '</div>' : '') + '</div>';
+        }).join('');
+        mdBanner.innerHTML = d.banner;
+        mdThead.innerHTML = '<tr>' + d.head.map(function (h) { return '<th class="' + (h.cls || '') + '">' + h.t + '</th>'; }).join('') + '</tr>';
+        mdTbody.innerHTML = d.rows.map(function (r) {
+          return '<tr>' + r.cells.map(cellHTML).join('') + '</tr>';
+        }).join('');
+        minidash.setAttribute('data-role', role);
+      }
+
+      if (minidash) {
+        paint(minidash.getAttribute('data-role') || 'manager');
+        minidash.querySelectorAll('.md-pill').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var role = btn.getAttribute('data-role');
+            minidash.querySelectorAll('.md-pill').forEach(function (b) {
+              var on = b === btn;
+              b.classList.toggle('active', on);
+              b.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            paint(role);
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
