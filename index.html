@@ -2462,11 +2462,6 @@
       </div>
     </section>
 
-    <div class="hero-switch" id="hero-switch" role="group" aria-label="Hero style">
-      <button class="hsw-btn active" data-mode="cards">Cards</button>
-      <button class="hsw-btn"        data-mode="scrolly">Scrolly</button>
-    </div>
-
     <section id="calculator" class="calc">
       <div class="calc-head">
         <h2 class="section-title">See your team's number.</h2>
@@ -2924,30 +2919,15 @@
         });
       });
 
-      // -------- hero style switch (scrolly | cards) --------
-      var heroSwitch = document.getElementById('hero-switch');
-      var heroMode = (function () {
-        try { return localStorage.getItem('tp_hero_mode') || 'cards'; } catch (e) { return 'cards'; }
+      // -------- hero style (cards by default; ?hero=scrolly for internal compare) --------
+      var heroModeFromQuery = (function () {
+        try {
+          var p = new URLSearchParams(window.location.search).get('hero');
+          return (p === 'scrolly' || p === 'cards') ? p : null;
+        } catch (e) { return null; }
       })();
-      function setHeroMode(mode) {
-        if (mode !== 'cards' && mode !== 'scrolly') mode = 'cards';
-        heroMode = mode;
-        document.body.setAttribute('data-hero', mode);
-        try { localStorage.setItem('tp_hero_mode', mode); } catch (e) {}
-        if (heroSwitch) {
-          heroSwitch.querySelectorAll('.hsw-btn').forEach(function (b) {
-            b.classList.toggle('active', b.getAttribute('data-mode') === mode);
-          });
-        }
-        // when leaving scrolly, scroll to top so static cards are visible from top
-        if (mode === 'cards') window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
-      }
-      setHeroMode(heroMode);
-      if (heroSwitch) {
-        heroSwitch.querySelectorAll('.hsw-btn').forEach(function (b) {
-          b.addEventListener('click', function () { setHeroMode(b.getAttribute('data-mode')); });
-        });
-      }
+      var heroMode = heroModeFromQuery || 'cards';
+      document.body.setAttribute('data-hero', heroMode);
 
       // -------- flip cards --------
       document.querySelectorAll('.hc-card').forEach(function (card) {
