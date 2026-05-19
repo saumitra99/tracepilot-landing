@@ -516,6 +516,169 @@
       font-size: 13px;
     }
 
+    /* ---------- hero style switch ---------- */
+    body[data-hero="scrolly"] .hero-cards   { display: none !important; }
+    body[data-hero="cards"]   .hero-scrolly { display: none !important; }
+
+    .hero-switch {
+      position: fixed;
+      left: 16px;
+      bottom: 16px;
+      z-index: 80;
+      background: rgba(20,20,31,.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px;
+      display: inline-flex;
+      gap: 2px;
+      box-shadow: 0 8px 24px -8px rgba(0,0,0,.6);
+    }
+    .hsw-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      background: transparent;
+      border: 0;
+      color: var(--text-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: .04em;
+      transition: background .15s, color .15s, box-shadow .15s;
+    }
+    .hsw-btn:hover { color: var(--text); }
+    .hsw-btn.active {
+      background: linear-gradient(180deg, rgba(139,124,255,.22), rgba(139,124,255,.06));
+      color: var(--text);
+      box-shadow: inset 0 0 0 1px rgba(139,124,255,.4);
+    }
+
+    /* ---------- flip-card hero ---------- */
+    .hero-cards {
+      padding: 80px 24px 64px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .hc-head { max-width: 760px; margin: 0 auto 28px; text-align: center; }
+    .hc-head .pill { margin-bottom: 18px; }
+    .hc-head .hero-h1 {
+      font-size: clamp(34px, 4.6vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      font-weight: 700;
+      margin: 0 0 14px;
+    }
+    .hc-head .hero-sub {
+      font-size: 16px;
+      color: var(--text-soft);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .hc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin: 0 auto;
+    }
+    .hc-card {
+      position: relative;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      perspective: 900px;
+      height: 168px;
+      font: inherit;
+      text-align: left;
+    }
+    .hc-card .hc-front,
+    .hc-card .hc-back {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px 16px 14px;
+      border-radius: var(--radius);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+      transform-style: preserve-3d;
+    }
+    .hc-card .hc-front {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      transform: rotateY(0deg);
+    }
+    .hc-card .hc-back {
+      background: linear-gradient(180deg, rgba(139,124,255,.06) 0%, rgba(139,124,255,.02) 100%);
+      border: 1px solid rgba(139,124,255,.35);
+      transform: rotateY(180deg);
+    }
+    .hc-card.flipped .hc-front { transform: rotateY(-180deg); }
+    .hc-card.flipped .hc-back  { transform: rotateY(0deg); }
+
+    .hc-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      align-self: flex-start;
+      padding: 2px 8px;
+      border: 1px solid rgba(139,124,255,.35);
+      border-radius: 999px;
+      background: rgba(139,124,255,.08);
+    }
+    .hc-q {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.35;
+      font-weight: 500;
+    }
+    .hc-tap {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-mute);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .hc-a-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.01em;
+      line-height: 1.1;
+    }
+    .hc-a-stat {
+      font-size: 13px;
+      color: var(--text);
+    }
+    .hc-a-flag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-soft);
+      align-self: flex-start;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .hc-a-flag.good { color: #86efac; border-color: rgba(74,222,128,.30); background: rgba(74,222,128,.08); }
+    .hc-a-flag.warn { color: #fcd34d; border-color: rgba(251,191,36,.30); background: rgba(251,191,36,.08); }
+    .hc-a-flag.bad  { color: #fca5a5; border-color: rgba(248,113,113,.30); background: rgba(248,113,113,.08); }
+
+    .hc-foot {
+      max-width: 600px;
+      margin: 36px auto 0;
+      display: flex; flex-direction: column; gap: 12px; align-items: center;
+    }
+    .hc-foot .waitlist { max-width: 460px; width: 100%; }
+
     /* ---------- scrollytelling hero ---------- */
     .hero-scrolly {
       position: relative;
@@ -588,9 +751,9 @@
     .tool {
       position: absolute;
       display: inline-flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
       padding: 10px 14px;
       background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
       border: 1px solid var(--line);
@@ -601,6 +764,15 @@
       box-shadow: 0 10px 30px -12px rgba(0,0,0,.5);
       transition: opacity .5s ease, transform .6s ease, background .4s ease, border-color .4s ease;
     }
+    .tool-icon {
+      width: 30px; height: 30px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .tool-icon svg { display: block; }
+    .tool-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
     .tool-name { font-weight: 600; color: var(--text); }
     .tool-cost {
       font-size: 11px;
@@ -1946,6 +2118,8 @@
       .cli-buffer { max-height: 280px; }
       .slack { transform: none; }
       .slack-body { min-height: 220px; padding: 14px 14px 6px; }
+      .hc-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-cards { padding: 56px 16px 40px; }
       .md-kpis { grid-template-columns: repeat(2, 1fr); }
       .md-table thead th { font-size: 9.5px; padding: 8px 10px; }
       .md-table tbody td { padding: 9px 10px; font-size: 12px; }
@@ -1978,6 +2152,11 @@
       .calc-output .md-kpi-v { font-size: 16px; }
       .cli-chip { font-size: 11px; padding: 5px 9px; }
       .cli-buffer { font-size: 11.5px; padding: 12px 14px 6px; }
+      .hc-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .hc-card { height: 156px; }
+      .hc-q { font-size: 13.5px; }
+      .hero-switch { padding: 3px; }
+      .hsw-btn { padding: 5px 10px; font-size: 10.5px; }
       .features, .how { padding: 64px 0 16px; }
       .cta { padding: 64px 0; }
       .row { grid-template-columns: 1.4fr .8fr .6fr .6fr; padding: 10px 14px; font-size: 12.5px; gap: 6px; }
@@ -2058,13 +2237,48 @@
         <div class="hero-scene">
           <!-- State 0+1+2: scattered tool tiles -->
           <div class="scene-tools" aria-hidden="true">
-            <span class="tool t-1"><span class="tool-name">Claude Code</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-2"><span class="tool-name">Cursor</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-3"><span class="tool-name">ChatGPT</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-4"><span class="tool-name">Claude.ai</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-5"><span class="tool-name">Perplexity</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-6"><span class="tool-name">Gemini</span><span class="tool-cost">$?</span></span>
-            <span class="tool t-7"><span class="tool-name">Antigravity</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-1">
+              <span class="tool-icon" style="color:#f0a583;background:rgba(217,119,87,.10);border-color:rgba(217,119,87,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="currentColor"><path d="M12 2 L13.2 9 L20 8 L14.5 12 L20 16 L13.2 15 L12 22 L10.8 15 L4 16 L9.5 12 L4 8 L10.8 9 Z"/></g></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Claude Code</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-2">
+              <span class="tool-icon" style="color:#c0b6ff;background:rgba(139,124,255,.10);border-color:rgba(139,124,255,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 4 L20 11 L13 13 L11 20 Z" fill="currentColor"/></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Cursor</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-3">
+              <span class="tool-icon" style="color:#6ee7b7;background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2 L21.5 7.25 V16.75 L12 22 L2.5 16.75 V7.25 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">ChatGPT</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-4">
+              <span class="tool-icon" style="color:#f0a583;background:rgba(217,119,87,.10);border-color:rgba(217,119,87,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="currentColor"><path d="M12 2 L13.2 9 L20 8 L14.5 12 L20 16 L13.2 15 L12 22 L10.8 15 L4 16 L9.5 12 L4 8 L10.8 9 Z"/></g></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Claude.ai</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-5">
+              <span class="tool-icon" style="color:#67e8f9;background:rgba(34,211,238,.10);border-color:rgba(34,211,238,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"><line x1="12" y1="3"  x2="12" y2="21"/><line x1="3"  y1="12" x2="21" y2="12"/><line x1="5.5" y1="5.5"  x2="18.5" y2="18.5"/><line x1="5.5" y1="18.5" x2="18.5" y2="5.5"/></g></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Perplexity</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-6">
+              <span class="tool-icon" style="color:#93c5fd;background:rgba(96,165,250,.10);border-color:rgba(96,165,250,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2 L13.4 10.6 L22 12 L13.4 13.4 L12 22 L10.6 13.4 L2 12 L10.6 10.6 Z" fill="currentColor"/></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Gemini</span><span class="tool-cost">$?</span></span>
+            </span>
+            <span class="tool t-7">
+              <span class="tool-icon" style="color:#86efac;background:rgba(74,222,128,.10);border-color:rgba(74,222,128,.4);">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M13 2 L4 14 H10 L9 22 L20 10 H13 Z" fill="currentColor"/></svg>
+              </span>
+              <span class="tool-body"><span class="tool-name">Antigravity</span><span class="tool-cost">$?</span></span>
+            </span>
           </div>
 
           <!-- State 1: question marks total -->
@@ -2125,6 +2339,133 @@
         <a class="hero-skip" href="#calculator" aria-label="Skip animation">↓ skip</a>
       </div>
     </section>
+
+    <section class="hero-cards" id="hero-cards">
+      <div class="hc-head">
+        <span class="pill"><span class="pill-dot"></span>Coming soon · private beta</span>
+        <h1 class="hero-h1">Can you answer these?</h1>
+        <p class="hero-sub">Eight questions every CFO, manager and dev keeps asking about AI work. <span class="hl">Click a card to see the answer.</span></p>
+      </div>
+
+      <div class="hc-grid">
+        <button class="hc-card" data-q="dev-spend">
+          <span class="hc-front">
+            <span class="hc-tag">cost</span>
+            <span class="hc-q">Which dev spent most this week?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">haricharan</span>
+            <span class="hc-a-stat">$71.30 · 44% rework</span>
+            <span class="hc-a-flag bad">⚠ above team p90</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="cache">
+          <span class="hc-front">
+            <span class="hc-tag">cost</span>
+            <span class="hc-q">What's your cache hit ratio?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">71%</span>
+            <span class="hc-a-stat">saved $184 / week</span>
+            <span class="hc-a-flag good">covers Cursor seat bill</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="ticket">
+          <span class="hc-front">
+            <span class="hc-tag">eval</span>
+            <span class="hc-q">How was CHESS-412 closed?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">3 turns · $48.20</span>
+            <span class="hc-a-stat">saumitra · 3 story points</span>
+            <span class="hc-a-flag good">$16.07 / pt</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="rework">
+          <span class="hc-front">
+            <span class="hc-tag">eval</span>
+            <span class="hc-q">Who has the highest rework rate?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">haricharan</span>
+            <span class="hc-a-stat">44% · above p90</span>
+            <span class="hc-a-flag bad">pair with nitendra?</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="drop">
+          <span class="hc-front">
+            <span class="hc-tag">tools</span>
+            <span class="hc-q">Which paid tool to drop?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">ChatGPT Team</span>
+            <span class="hc-a-stat">$48 used of $150 paid</span>
+            <span class="hc-a-flag warn">drop · save $102/mo</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="pr">
+          <span class="hc-front">
+            <span class="hc-tag">throughput</span>
+            <span class="hc-q">$ / PR shipped this month?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">$37.40</span>
+            <span class="hc-a-stat">avg over 38 merged PRs</span>
+            <span class="hc-a-flag">p90: $89 · 82% anchored</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="anomaly">
+          <span class="hc-front">
+            <span class="hc-tag">alerts</span>
+            <span class="hc-q">Any anomalies last 24h?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">1 spike</span>
+            <span class="hc-a-stat">haricharan · $42.10</span>
+            <span class="hc-a-flag bad">4.1σ above baseline</span>
+          </span>
+        </button>
+
+        <button class="hc-card" data-q="plan">
+          <span class="hc-front">
+            <span class="hc-tag">budget</span>
+            <span class="hc-q">How full are your AI plans?</span>
+            <span class="hc-tap">tap to reveal ↻</span>
+          </span>
+          <span class="hc-back">
+            <span class="hc-a-name">79%</span>
+            <span class="hc-a-stat">Claude Code 7/8 · Cursor 6/8</span>
+            <span class="hc-a-flag warn">Gemini at cap (3/3)</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="hc-foot">
+        <form class="waitlist" autocomplete="off">
+          <input type="email" name="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
+          <button type="submit"><span>Join waitlist</span></button>
+        </form>
+        <p class="hero-platforms"><span class="dot dot-g"></span> macOS · Windows · Linux · <span class="mono">single Rust binary</span></p>
+      </div>
+    </section>
+
+    <div class="hero-switch" id="hero-switch" role="group" aria-label="Hero style">
+      <button class="hsw-btn active" data-mode="scrolly">Scrolly</button>
+      <button class="hsw-btn"        data-mode="cards">Cards</button>
+    </div>
 
     <section id="calculator" class="calc">
       <div class="calc-head">
@@ -2580,6 +2921,38 @@
             if (on) p.removeAttribute('hidden');
             else p.setAttribute('hidden', '');
           });
+        });
+      });
+
+      // -------- hero style switch (scrolly | cards) --------
+      var heroSwitch = document.getElementById('hero-switch');
+      var heroMode = (function () {
+        try { return localStorage.getItem('tp_hero_mode') || 'scrolly'; } catch (e) { return 'scrolly'; }
+      })();
+      function setHeroMode(mode) {
+        if (mode !== 'cards' && mode !== 'scrolly') mode = 'scrolly';
+        heroMode = mode;
+        document.body.setAttribute('data-hero', mode);
+        try { localStorage.setItem('tp_hero_mode', mode); } catch (e) {}
+        if (heroSwitch) {
+          heroSwitch.querySelectorAll('.hsw-btn').forEach(function (b) {
+            b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+          });
+        }
+        // when leaving scrolly, scroll to top so static cards are visible from top
+        if (mode === 'cards') window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+      }
+      setHeroMode(heroMode);
+      if (heroSwitch) {
+        heroSwitch.querySelectorAll('.hsw-btn').forEach(function (b) {
+          b.addEventListener('click', function () { setHeroMode(b.getAttribute('data-mode')); });
+        });
+      }
+
+      // -------- flip cards --------
+      document.querySelectorAll('.hc-card').forEach(function (card) {
+        card.addEventListener('click', function () {
+          card.classList.toggle('flipped');
         });
       });
 
