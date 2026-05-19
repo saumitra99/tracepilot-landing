@@ -656,6 +656,7 @@
       color: var(--text);
       box-shadow: inset 0 0 0 1px rgba(139,124,255,.35);
     }
+    .minidash[data-role="dev"]     .md-pill.active { background: rgba(56,189,248,.18);  box-shadow: inset 0 0 0 1px rgba(56,189,248,.35); }
     .minidash[data-role="lead"]    .md-pill.active { background: rgba(139,124,255,.18); }
     .minidash[data-role="manager"] .md-pill.active { background: rgba(251,191,36,.18); box-shadow: inset 0 0 0 1px rgba(251,191,36,.35); }
     .minidash[data-role="owner"]   .md-pill.active { background: rgba(52,211,153,.18);  box-shadow: inset 0 0 0 1px rgba(52,211,153,.35); }
@@ -679,6 +680,7 @@
       content: '';
       position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
     }
+    .minidash[data-role="dev"]     .md-kpi::before { background: #38bdf8; }
     .minidash[data-role="lead"]    .md-kpi::before { background: #8b7cff; }
     .minidash[data-role="manager"] .md-kpi::before { background: #fbbf24; }
     .minidash[data-role="owner"]   .md-kpi::before { background: #34d399; }
@@ -720,6 +722,7 @@
       position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
       border-radius: var(--radius-sm) 0 0 var(--radius-sm);
     }
+    .minidash[data-role="dev"]     .md-banner::before { background: #38bdf8; }
     .minidash[data-role="lead"]    .md-banner::before { background: #8b7cff; }
     .minidash[data-role="manager"] .md-banner::before { background: #fbbf24; }
     .minidash[data-role="owner"]   .md-banner::before { background: #34d399; }
@@ -840,6 +843,7 @@
       position: absolute; left: 0; top: 0; bottom: 0;
       border-radius: 3px;
     }
+    .minidash[data-role="dev"]     .md-bar > span { background: linear-gradient(90deg, #38bdf8, #7cd4fd); }
     .minidash[data-role="lead"]    .md-bar > span { background: linear-gradient(90deg, #8b7cff, #c0b6ff); }
     .minidash[data-role="manager"] .md-bar > span { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
     .minidash[data-role="owner"]   .md-bar > span { background: linear-gradient(90deg, #34d399, #6ee7b7); }
@@ -1804,7 +1808,7 @@
           </div>
         </div>
 
-        <div class="minidash" data-role="manager">
+        <div class="minidash" data-role="lead">
           <div class="md-head">
             <div class="md-title">
               <span class="md-mark">◢◤</span>
@@ -1812,9 +1816,9 @@
               <span class="md-demo">demo data</span>
             </div>
             <div class="md-toggle" role="tablist">
-              <button class="md-pill" role="tab" data-role="lead"    aria-selected="false">Lead</button>
-              <button class="md-pill active" role="tab" data-role="manager" aria-selected="true">Manager</button>
-              <button class="md-pill" role="tab" data-role="owner"   aria-selected="false">Owner</button>
+              <button class="md-pill" role="tab" data-role="dev"   aria-selected="false">Developer</button>
+              <button class="md-pill active" role="tab" data-role="lead"  aria-selected="true">Manager / Lead</button>
+              <button class="md-pill" role="tab" data-role="owner" aria-selected="false">Owner</button>
             </div>
           </div>
 
@@ -2036,6 +2040,75 @@
       function toolPill(kind, text) { return '<span class="md-pill-mini" style="' + TOOL_PILL[kind] + '">' + text + '</span>'; }
 
       var ROLE_DATA = {
+        dev: {
+          kpis: [
+            { v: '22%',  l: 'rework rate',         d: '31 of 142 prompts debug-shaped · ▲ 6%' },
+            { v: '71%',  l: 'cache hit ratio',     d: 'saved $11.40 · ▼ context churn' },
+            { v: '38%',  l: 'first-prompt success',d: '54 / 142 tasks closed in 1 turn' },
+            { v: '0.6',  l: 'thinking ÷ action',   d: 'healthy · median dev 0.7' }
+          ],
+          banner: '<b>Coach note:</b> Three of your debug streaks started right after a Read-without-Edit dead-end on <code>react-native-chessboard</code>. Try a single-prompt spec that says "read X, then edit Y for behavior Z" to skip the recon round.',
+          mainTitle: 'Top expensive tasks · last 7 days',
+          head: [
+            { t: 'time',   cls: '' },
+            { t: 'prompt', cls: '' },
+            { t: 'tool',   cls: '' },
+            { t: 'turns',  cls: 'num' },
+            { t: 'cost',   cls: 'num' }
+          ],
+          rows: [
+            { cells: ['Mon 14:22', 'Trace pawn promotion code path in react-native-chess…', toolPill('claude','claude-code'), { v: '35', cls: 'num' }, { v: '$8.83', cls: 'num' }] },
+            { cells: ['Tue 09:14', 'in the chessboard the user is not able to promote the piece…', toolPill('claude','claude-code'), { v: '10', cls: 'num' }, { v: '$2.87', cls: 'num' }] },
+            { cells: ['Wed 18:50', 'add OTA dashboard CSOC stuck-user diagnosis flow', toolPill('cursor','cursor'), { v: '22', cls: 'num' }, { v: '$2.41', cls: 'num' }] },
+            { cells: ['Thu 11:03', 'research best way to show data — psych perspective…', toolPill('gemini','gemini-web'), { v: '4',  cls: 'num' }, { v: '$1.92', cls: 'num' }] },
+            { cells: ['Fri 16:45', 'fix nscl battle socket clientType isolation', toolPill('claude','claude-code'), { v: '14', cls: 'num' }, { v: '$1.78', cls: 'num' }] }
+          ],
+          sideA: {
+            title: 'Hour-of-day spend',
+            bars: [
+              { l: '6a–10a',  v: '$0.60', pct: 14 },
+              { l: '10a–12p', v: '$1.20', pct: 28 },
+              { l: '12p–2p',  v: '$2.10', pct: 49 },
+              { l: '2p–4p',   v: '$3.10', pct: 72 },
+              { l: '4p–6p',   v: '$4.40', pct: 100 },
+              { l: '6p–8p',   v: '$2.20', pct: 50 },
+              { l: '8p–10p',  v: '$1.30', pct: 30, vCls: 'warn' },
+              { l: '10p–2a',  v: '$0.40', pct: 9,  vCls: 'warn' }
+            ]
+          },
+          sideB: {
+            title: 'Read-without-Edit dead-ends',
+            rows: [
+              { l: 'react-native-chessboard/src/context/board-op', s: 'Read 7× · Grep 4× · no Edit', v: '$0.84', vCls: 'bad' },
+              { l: 'chess-be/chess/ota/views.py',                  s: 'Read 5× · no Edit',          v: '$0.42', vCls: 'warn' },
+              { l: 'NSCL-web/.../LeaderboardPage.tsx',             s: 'Read 4× · Grep 2× · no Edit',v: '$0.31', vCls: 'warn' }
+            ]
+          },
+          footA: {
+            title: 'Correction streaks · last 7 days',
+            rows: [
+              { l: '"no" → "wait, also include cache" → "stop, undo last edit"', s: 'Tue 22:14 · CHESS-412' },
+              { l: '"actually use Sonnet" → "no still Opus, force"',              s: 'Wed 19:02 · main' },
+              { l: '"wrong file" → "wrong file again"',                           s: 'Fri 11:31 · nscl-points' }
+            ]
+          },
+          footB: {
+            title: 'File hot-spots',
+            rows: [
+              { l: 'chess-be/chess/ota/views.py',           s: 'this week',  v: '8R · 3E' },
+              { l: 'react-native-chessboard/board-op.ts',   s: 'this week',  v: '7R · 0E', vCls: 'bad' },
+              { l: 'NSCL-web/.../LeaderboardPage.tsx',      s: 'this week',  v: '4R · 0E', vCls: 'warn' }
+            ]
+          },
+          footC: {
+            title: 'Model fit · this week',
+            rows: [
+              { l: 'Opus 4.7',   s: 'on 12 Read-only tasks', v: '62%' },
+              { l: 'Sonnet 4.6', s: 'safe choice',           v: '28%' },
+              { l: 'simulator',  s: '25% Opus → Sonnet on Read-only', v: 'save $8/wk', vCls: 'good' }
+            ]
+          }
+        },
         lead: {
           kpis: [
             { v: '64%',  l: 'anchor coverage', d: '36% of work has no ticket' },
@@ -2105,14 +2178,14 @@
           }
         },
 
-        manager: {
+        owner: {
           kpis: [
-            { v: '$312',   l: 'this week',   d: '▼ 8% vs last week' },
-            { v: '$1,420', l: 'forecast',    d: 'within $1,800 cap' },
-            { v: '$184',   l: 'cache-saved', d: '37% of gross input' },
-            { v: '79%',    l: 'plan util',   d: 'Claude Code 7/8 seats' }
+            { v: '$312',   l: 'spend this week',  d: '▼ 8% vs last week ($339)' },
+            { v: '$1,420', l: 'month-end forecast', d: 'within $1,800 plan cap' },
+            { v: '$184',   l: 'cache-saved $',    d: '37% of gross input cost' },
+            { v: '79%',    l: 'plan utilization', d: 'Claude Code 7/8 · Cursor 6/8' }
           ],
-          banner: '<b>This week\'s win:</b> Cache saved $184 — more than the entire Cursor seat bill. Push prompt-caching to the two devs below 50% cache hit.',
+          banner: '<b>This week\'s win:</b> Cache saved $184 — more than the entire Cursor seat bill. Push prompt-caching to the two devs with cache hit < 50%.',
           mainTitle: 'Spend per Jira ticket · top 5',
           head: [
             { t: 'ticket', cls: '' },
@@ -2143,102 +2216,36 @@
           sideB: {
             title: 'Model mix · last 30 days',
             rows: [
-              { l: 'Opus 4.7',   s: '48% of spend',  v: '$682' },
-              { l: 'Sonnet 4.6', s: '30% of spend',  v: '$214' },
-              { l: 'Haiku 4.5',  s: '22% of spend',  v: '$74' },
-              { l: 'simulator',  s: 'shift 30% Opus → Sonnet', v: 'save $143/mo' }
+              { l: 'Opus 4.7',   s: '48% of spend',                   v: '$682' },
+              { l: 'Sonnet 4.6', s: '30% of spend',                   v: '$214' },
+              { l: 'Haiku 4.5',  s: '22% of spend',                   v: '$74'  },
+              { l: 'simulator',  s: 'shift 30% Opus → Sonnet',        v: 'save $143/mo', vCls: 'good' }
             ]
           },
           footA: {
-            title: 'Anomaly alerts · 24h',
+            title: 'Tool subscriptions · justification',
             rows: [
-              { l: 'haricharan spike', s: '$42.10 · 4.1σ above 14d baseline', v: 'Slack' },
-              { l: 'org cache hit drift', s: '68% → 61% · ~$28/wk leak',      v: 'watch' },
-              { l: 'off-hours spend',  s: '22% after 10pm (haricharan half)', v: 'note'  }
+              { l: 'Claude Code · 10 seats',     s: '$1,180 of $200',  v: '<span class="md-pill-mini verdict-keep">keep</span>' },
+              { l: 'Cursor · 10 seats',          s: '$220 of $200',    v: '<span class="md-pill-mini verdict-downgrade">downgrade</span>' },
+              { l: 'ChatGPT Team · 5 seats',     s: '$48 of $150',     v: '<span class="md-pill-mini verdict-drop">drop</span>' },
+              { l: 'Gemini Advanced · 3 seats',  s: '$92 of $60',      v: '<span class="md-pill-mini verdict-keep">keep</span>' }
             ]
           },
           footB: {
-            title: 'Off-hours spend',
+            title: 'Anomaly alerts · 24h',
             rows: [
-              { l: 'team avg',    s: '22% of cost after 9pm', v: '$68' },
-              { l: 'haricharan',  s: 'highest · burnout risk',v: '47%' },
-              { l: 'nitendra',    s: 'within band',           v: '12%' }
+              { l: 'haricharan spike',     s: '$42.10 · 4.1σ above 14-d baseline', v: 'Slack', vCls: 'bad' },
+              { l: 'org cache hit drift',  s: '68% → 61% over 7 days · ~$28/wk',   v: 'watch', vCls: 'warn' },
+              { l: 'off-hours spend',      s: '22% after 10pm (haricharan half)',  v: 'note'  }
             ]
           },
           footC: {
-            title: 'Forecast trend',
-            rows: [
-              { l: 'month-end',   s: 'within $1,800 cap',   v: '$1,420' },
-              { l: '7-day avg',   s: '$/day spend',         v: '$52' },
-              { l: 'days left',   s: 'in current cycle',    v: '14' }
-            ]
-          }
-        },
-
-        owner: {
-          kpis: [
-            { v: '$1,420', l: 'org month',     d: '7 devs · 4 paid tools' },
-            { v: '$184',   l: 'cache-saved',   d: 'covers Cursor seats' },
-            { v: '79%',    l: 'plan util',     d: 'Claude Code 7/8 seats' },
-            { v: '4.1σ',   l: 'top anomaly',   d: 'haricharan · 24h' }
-          ],
-          banner: '<b>Anomaly:</b> haricharan $42.10 in last 24h — 4.1σ above 14-day baseline. Three tasks > $10 on <code>nscl-mission</code>. Routed to akshay, cc’d gaurav.',
-          mainTitle: 'Tool subscriptions · justification',
-          head: [
-            { t: 'tool',     cls: '' },
-            { t: 'seats',    cls: 'num' },
-            { t: 'cost',     cls: 'num' },
-            { t: '$ via',    cls: 'num' },
-            { t: 'verdict',  cls: '' }
-          ],
-          rows: [
-            { cells: ['Claude Code',     { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$1,180', cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] },
-            { cells: ['Cursor',          { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$220',   cls: 'num' }, '<span class="md-pill-mini verdict-downgrade">downgrade</span>'] },
-            { cells: ['ChatGPT Team',    { v: '5',  cls: 'num' }, { v: '$150', cls: 'num' }, { v: '$48',    cls: 'num' }, '<span class="md-pill-mini verdict-drop">drop</span>'] },
-            { cells: ['Gemini Advanced', { v: '3',  cls: 'num' }, { v: '$60',  cls: 'num' }, { v: '$92',    cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] }
-          ],
-          sideA: {
-            title: 'Per-product attribution',
-            bars: [
-              { l: 'circle-chess (chess-be)', v: '$612', pct: 100 },
-              { l: 'NSCL platform',           v: '$358', pct: 58 },
-              { l: 'cc-home / mastery',       v: '$194', pct: 32 },
-              { l: 'cc-learning-app',         v: '$176', pct: 29 },
-              { l: 'infra / ops',             v: '$80',  pct: 13 }
-            ]
-          },
-          sideB: {
-            title: '$/PR proxy · last 30 days',
-            rows: [
-              { l: 'merged PRs',         s: 'across all repos',          v: '38' },
-              { l: 'anchor-matched PRs', s: '82% attribution coverage',  v: '31' },
-              { l: '$/PR · average',     s: 'closest thing to AI ROI',   v: '$37.40' },
-              { l: '$/PR · p90',         s: 'expensive outlier band',    v: '$89.00' }
-            ]
-          },
-          footA: {
             title: 'Plan utilization · per tool',
             bars: [
               { l: 'Claude Code Max', v: '7/8',  pct: 88 },
               { l: 'Cursor',          v: '6/8',  pct: 75 },
               { l: 'ChatGPT Team',    v: '1/5',  pct: 20 },
               { l: 'Gemini Advanced', v: '3/3',  pct: 100 }
-            ]
-          },
-          footB: {
-            title: 'Spend by phase · org',
-            rows: [
-              { l: 'build (CLI tools)', s: 'editor + agent loops',    v: '$1,022' },
-              { l: 'research (web)',    s: 'chat tabs',               v: '$256' },
-              { l: 'review (agents)',   s: 'code-reviewer · security',v: '$142' }
-            ]
-          },
-          footC: {
-            title: 'Cache-saved trend',
-            rows: [
-              { l: 'this week', s: 'covers Cursor bill',  v: '$184' },
-              { l: '4-week avg', s: 'compounding savings', v: '$156' },
-              { l: 'YTD',        s: 'since rollout',       v: '$1,840' }
             ]
           }
         }
