@@ -1001,7 +1001,7 @@
           Runs on your machine. Nothing leaves it.
         </p>
 
-        <form id="waitlist" class="waitlist" autocomplete="off">
+        <form class="waitlist" autocomplete="off">
           <input type="email" name="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
           <button type="submit">
             <span>Join waitlist</span>
@@ -1452,7 +1452,7 @@
       </div>
     </section>
 
-    <section class="cta">
+    <section id="waitlist" class="cta">
       <h2>Get notified when the beta opens.</h2>
       <p>We're polishing the rough edges with a small group. Drop your email — we'll send one message, when it's ready.</p>
       <form class="waitlist waitlist-lg" autocomplete="off">
@@ -1565,6 +1565,8 @@
             if (el) {
               e.preventDefault();
               el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              var emailInput = el.querySelector('input[type=email]');
+              if (emailInput) setTimeout(function () { emailInput.focus({ preventScroll: true }); }, 500);
             }
           }
         });
