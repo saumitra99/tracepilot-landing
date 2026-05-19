@@ -771,6 +771,100 @@
     .verdict-downgrade { background: rgba(251,191,36,.10);  color: #fcd34d; border-color: rgba(251,191,36,.30); }
     .verdict-drop      { background: rgba(248,113,113,.10); color: #fca5a5; border-color: rgba(248,113,113,.30); }
 
+    .md-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .md-panel-head {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      padding: 8px 12px 6px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .md-main { background: rgba(255,255,255,.015); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); overflow: hidden; }
+    .md-main .md-table thead th { border-top: 0; }
+    .md-side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    .md-card {
+      background: rgba(255,255,255,.015);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .md-list { padding: 6px 0; }
+    .md-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 12.5px;
+    }
+    .md-row:last-child { border-bottom: 0; }
+    .md-row-label { color: var(--text); min-width: 0; }
+    .md-row-label .sub {
+      display: block;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin-top: 2px;
+      line-height: 1.45;
+    }
+    .md-row-v { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text); text-align: right; white-space: nowrap; }
+    .md-row-v.warn { color: #fcd34d; }
+    .md-row-v.bad  { color: #fca5a5; }
+    .md-row-v.good { color: #86efac; }
+
+    .md-footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+      margin-bottom: 4px;
+    }
+
+    /* simple horizontal bar */
+    .md-bar {
+      position: relative;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.05);
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .md-bar > span {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      border-radius: 3px;
+    }
+    .minidash[data-role="lead"]    .md-bar > span { background: linear-gradient(90deg, #8b7cff, #c0b6ff); }
+    .minidash[data-role="manager"] .md-bar > span { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
+    .minidash[data-role="owner"]   .md-bar > span { background: linear-gradient(90deg, #34d399, #6ee7b7); }
+
+    .md-stat {
+      padding: 10px 12px;
+    }
+    .md-stat-v {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+    .md-stat-l {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+    .md-stat-d {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-mute);
+      margin-top: 4px;
+    }
+
     /* ---------- demo (single-task card) ---------- */
     .demo { padding: 96px 0 48px; }
     .demo-head { max-width: 760px; margin-bottom: 32px; }
@@ -1166,6 +1260,8 @@
       .md-kpis { grid-template-columns: repeat(2, 1fr); }
       .md-table thead th { font-size: 9.5px; padding: 8px 10px; }
       .md-table tbody td { padding: 9px 10px; font-size: 12px; }
+      .md-grid { grid-template-columns: 1fr; }
+      .md-footer { grid-template-columns: 1fr 1fr; }
       .teams { padding: 64px 0 24px; }
       .teams-cta { flex-direction: column; align-items: flex-start; }
       .drill-row { grid-template-columns: 1fr; }
@@ -1186,6 +1282,9 @@
       .md-table { display: block; overflow-x: auto; }
       .md-table thead th { white-space: nowrap; }
       .md-banner { font-size: 12px; }
+      .md-footer { grid-template-columns: 1fr; }
+      .md-grid { gap: 10px; }
+      .md-row { font-size: 12px; padding: 7px 10px; }
       .features, .how { padding: 64px 0 16px; }
       .cta { padding: 64px 0; }
       .row { grid-template-columns: 1.4fr .8fr .6fr .6fr; padding: 10px 14px; font-size: 12.5px; gap: 6px; }
@@ -1722,7 +1821,36 @@
           <div class="md-body">
             <div class="md-kpis" id="md-kpis"></div>
             <div class="md-banner" id="md-banner"></div>
-            <table class="md-table"><thead id="md-thead"></thead><tbody id="md-tbody"></tbody></table>
+            <div class="md-grid">
+              <div class="md-main">
+                <div class="md-panel-head" id="md-main-title">main</div>
+                <table class="md-table"><thead id="md-thead"></thead><tbody id="md-tbody"></tbody></table>
+              </div>
+              <div class="md-side">
+                <div class="md-card">
+                  <div class="md-panel-head" id="md-sideA-title">side A</div>
+                  <div class="md-list" id="md-sideA"></div>
+                </div>
+                <div class="md-card">
+                  <div class="md-panel-head" id="md-sideB-title">side B</div>
+                  <div class="md-list" id="md-sideB"></div>
+                </div>
+              </div>
+            </div>
+            <div class="md-footer">
+              <div class="md-card">
+                <div class="md-panel-head" id="md-footA-title">A</div>
+                <div class="md-list" id="md-footA"></div>
+              </div>
+              <div class="md-card">
+                <div class="md-panel-head" id="md-footB-title">B</div>
+                <div class="md-list" id="md-footB"></div>
+              </div>
+              <div class="md-card">
+                <div class="md-panel-head" id="md-footC-title">C</div>
+                <div class="md-list" id="md-footC"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1898,6 +2026,15 @@
       });
 
       // -------- mini dashboard (role-switching) --------
+      var TOOL_PILL = {
+        claude: 'border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;',
+        cursor: 'border-color:rgba(139,124,255,.30);background:rgba(139,124,255,.10);color:#c0b6ff;',
+        gemini: 'border-color:rgba(96,165,250,.30);background:rgba(96,165,250,.10);color:#93c5fd;',
+        cgpt:   'border-color:rgba(16,185,129,.30);background:rgba(16,185,129,.10);color:#6ee7b7;',
+        pplx:   'border-color:rgba(34,211,238,.30);background:rgba(34,211,238,.10);color:#67e8f9;'
+      };
+      function toolPill(kind, text) { return '<span class="md-pill-mini" style="' + TOOL_PILL[kind] + '">' + text + '</span>'; }
+
       var ROLE_DATA = {
         lead: {
           kpis: [
@@ -1906,7 +2043,8 @@
             { v: '41%',  l: 'skill adoption',  d: 'tasks invoking a skill' },
             { v: '1.3',  l: 'subagent fanout', d: 'avg parallel Agent()/task' }
           ],
-          banner: '<b>Watch:</b> Two devs (haricharan, balaji) sit above p90 rework. Both first time on <code>nscl-mission</code> — schedule a 30-min pair session.',
+          banner: '<b>Watch:</b> Two devs (haricharan, balaji) sit above p90 rework. Both first time on <code>nscl-mission</code> — schedule a 30-min pair session and surface the <code>nscl-mission</code> skill to them.',
+          mainTitle: 'Per-dev quality · last 7 days',
           head: [
             { t: 'developer', cls: '' },
             { t: 'spend',     cls: 'num' },
@@ -1915,14 +2053,58 @@
             { t: 'top tool',  cls: '' }
           ],
           rows: [
-            { cells: ['saumitra',   { v: '$48.20', cls: 'num' }, { v: '22%', cls: 'num warn' }, { v: '71%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] },
-            { cells: ['nitendra',   { v: '$54.10', cls: 'num' }, { v: '14%', cls: 'num good' }, { v: '78%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] },
-            { cells: ['abhijeet',   { v: '$33.50', cls: 'num' }, { v: '29%', cls: 'num warn' }, { v: '61%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(96,165,250,.30);background:rgba(96,165,250,.10);color:#93c5fd;">gemini-web</span>'] },
-            { cells: ['haricharan', { v: '$71.30', cls: 'num' }, { v: '44%', cls: 'num bad' },  { v: '42%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(139,124,255,.30);background:rgba(139,124,255,.10);color:#c0b6ff;">cursor</span>'] },
-            { cells: ['balaji',     { v: '$38.40', cls: 'num' }, { v: '41%', cls: 'num bad' },  { v: '48%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(139,124,255,.30);background:rgba(139,124,255,.10);color:#c0b6ff;">cursor</span>'] },
-            { cells: ['shivam',     { v: '$25.00', cls: 'num' }, { v: '11%', cls: 'num good' }, { v: '82%', cls: 'num' }, '<span class="md-pill-mini" style="border-color:rgba(217,119,87,.30);background:rgba(217,119,87,.10);color:#f0a583;">claude-code</span>'] }
-          ]
+            { cells: ['saumitra',   { v: '$48.20', cls: 'num' }, { v: '22%', cls: 'num warn' }, { v: '71%', cls: 'num' }, toolPill('claude','claude-code')] },
+            { cells: ['nitendra',   { v: '$54.10', cls: 'num' }, { v: '14%', cls: 'num good' }, { v: '78%', cls: 'num' }, toolPill('claude','claude-code')] },
+            { cells: ['abhijeet',   { v: '$33.50', cls: 'num' }, { v: '29%', cls: 'num warn' }, { v: '61%', cls: 'num' }, toolPill('gemini','gemini-web')] },
+            { cells: ['haricharan', { v: '$71.30', cls: 'num' }, { v: '44%', cls: 'num bad' },  { v: '42%', cls: 'num' }, toolPill('cursor','cursor')] },
+            { cells: ['balaji',     { v: '$38.40', cls: 'num' }, { v: '41%', cls: 'num bad' },  { v: '48%', cls: 'num' }, toolPill('cursor','cursor')] },
+            { cells: ['subhojeet',  { v: '$22.10', cls: 'num' }, { v: '16%', cls: 'num good' }, { v: '74%', cls: 'num' }, toolPill('claude','claude-code')] },
+            { cells: ['shivam',     { v: '$25.00', cls: 'num' }, { v: '11%', cls: 'num good' }, { v: '82%', cls: 'num' }, toolPill('claude','claude-code')] }
+          ],
+          sideA: {
+            title: 'Repeated knowledge gaps · ≥3 devs',
+            rows: [
+              { l: '"how does auth flow / OTP login work"', s: '5 devs asked this week → propose doc in NSCL-web/docs/auth.md' },
+              { l: '"why is socket disconnecting on clientType X"', s: '3 devs · already covered in skill-websocket — push the skill' },
+              { l: '"where is the points table updated"', s: '4 devs · partial coverage in nscl-flow skill — expand it' }
+            ]
+          },
+          sideB: {
+            title: 'Top expensive tasks · team',
+            rows: [
+              { l: 'refactor mission progress pipeline + streak tests', s: 'haricharan · 82 turns', v: '$14.20' },
+              { l: 'NSCL battle socket reconnect storm', s: 'nitendra · 67 turns',     v: '$11.80' },
+              { l: 'mastery series payment race fix',     s: 'balaji · 54 turns',      v: '$9.40' },
+              { l: 'pawn promotion code path trace',      s: 'saumitra · 35 turns',    v: '$8.83' }
+            ]
+          },
+          footA: {
+            title: 'Branch concurrency · spikes',
+            rows: [
+              { l: 'haricharan', s: 'Mon · 7 anchors',      v: '× ctx-switch' },
+              { l: 'haricharan', s: 'Tue · 6 anchors',      v: 'sustained' },
+              { l: 'team median', s: '2.1 anchors / day',   v: 'healthy' }
+            ]
+          },
+          footB: {
+            title: 'Quality-gate adoption',
+            rows: [
+              { l: 'code-reviewer agent',          s: 'used in PR-shipping tasks', v: '31%' },
+              { l: 'requesting-code-review skill', s: '▲ from 9% last week',       v: '18%' },
+              { l: 'systematic-debugging',         s: '▼ from 38%',                v: '24%' },
+              { l: 'test-driven-development',      s: 'lowest in team',            v: '12%' }
+            ]
+          },
+          footC: {
+            title: 'Onboarding curve',
+            rows: [
+              { l: 'shivam', s: '▲ from 2 tools/wk last wk', v: '5 tools/wk' },
+              { l: 'subhojeet', s: 'steady',                 v: '4 tools/wk' },
+              { l: 'q1-joiner', s: 'not tracked yet',        v: '—' }
+            ]
+          }
         },
+
         manager: {
           kpis: [
             { v: '$312',   l: 'this week',   d: '▼ 8% vs last week' },
@@ -1930,7 +2112,8 @@
             { v: '$184',   l: 'cache-saved', d: '37% of gross input' },
             { v: '79%',    l: 'plan util',   d: 'Claude Code 7/8 seats' }
           ],
-          banner: '<b>This week\'s win:</b> Cache saved $184 — more than the entire Cursor seat bill. Push prompt-caching to the two devs below 50% hit.',
+          banner: '<b>This week\'s win:</b> Cache saved $184 — more than the entire Cursor seat bill. Push prompt-caching to the two devs below 50% cache hit.',
+          mainTitle: 'Spend per Jira ticket · top 5',
           head: [
             { t: 'ticket', cls: '' },
             { t: 'title',  cls: '' },
@@ -1944,16 +2127,63 @@
             { cells: ['NSCL-201',  'Mission streak rework',     { v: '$71.30', cls: 'num' }, { v: '2', cls: 'num' }, { v: '$35.65', cls: 'num bad' }] },
             { cells: ['MAST-44',   'Mastery payment race',      { v: '$22.40', cls: 'num' }, { v: '3', cls: 'num' }, { v: '$7.47',  cls: 'num' }] },
             { cells: ['OTA-12',    'OTA phone-OTP login',       { v: '$18.10', cls: 'num' }, { v: '5', cls: 'num' }, { v: '$3.62',  cls: 'num good' }] }
-          ]
+          ],
+          sideA: {
+            title: 'Spend per dev · this month',
+            bars: [
+              { l: 'haricharan', v: '$71.30', pct: 100 },
+              { l: 'nitendra',   v: '$54.10', pct: 76 },
+              { l: 'saumitra',   v: '$48.20', pct: 68 },
+              { l: 'balaji',     v: '$38.40', pct: 54 },
+              { l: 'abhijeet',   v: '$33.50', pct: 47 },
+              { l: 'shivam',     v: '$25.00', pct: 35 },
+              { l: 'subhojeet',  v: '$22.10', pct: 31 }
+            ]
+          },
+          sideB: {
+            title: 'Model mix · last 30 days',
+            rows: [
+              { l: 'Opus 4.7',   s: '48% of spend',  v: '$682' },
+              { l: 'Sonnet 4.6', s: '30% of spend',  v: '$214' },
+              { l: 'Haiku 4.5',  s: '22% of spend',  v: '$74' },
+              { l: 'simulator',  s: 'shift 30% Opus → Sonnet', v: 'save $143/mo' }
+            ]
+          },
+          footA: {
+            title: 'Anomaly alerts · 24h',
+            rows: [
+              { l: 'haricharan spike', s: '$42.10 · 4.1σ above 14d baseline', v: 'Slack' },
+              { l: 'org cache hit drift', s: '68% → 61% · ~$28/wk leak',      v: 'watch' },
+              { l: 'off-hours spend',  s: '22% after 10pm (haricharan half)', v: 'note'  }
+            ]
+          },
+          footB: {
+            title: 'Off-hours spend',
+            rows: [
+              { l: 'team avg',    s: '22% of cost after 9pm', v: '$68' },
+              { l: 'haricharan',  s: 'highest · burnout risk',v: '47%' },
+              { l: 'nitendra',    s: 'within band',           v: '12%' }
+            ]
+          },
+          footC: {
+            title: 'Forecast trend',
+            rows: [
+              { l: 'month-end',   s: 'within $1,800 cap',   v: '$1,420' },
+              { l: '7-day avg',   s: '$/day spend',         v: '$52' },
+              { l: 'days left',   s: 'in current cycle',    v: '14' }
+            ]
+          }
         },
+
         owner: {
           kpis: [
             { v: '$1,420', l: 'org month',     d: '7 devs · 4 paid tools' },
             { v: '$184',   l: 'cache-saved',   d: 'covers Cursor seats' },
-            { v: '79%',    l: 'plan util',     d: 'Claude Code 7/8' },
-            { v: '4.1σ',  l: 'anomalies', d: 'haricharan spike · 24h' }
+            { v: '79%',    l: 'plan util',     d: 'Claude Code 7/8 seats' },
+            { v: '4.1σ',   l: 'top anomaly',   d: 'haricharan · 24h' }
           ],
-          banner: '<b>Anomaly:</b> haricharan $42.10 in last 24h — 4.1σ above 14-day baseline. Three tasks &gt; $10 on <code>nscl-mission</code>. Routed to akshay, cc’d gaurav.',
+          banner: '<b>Anomaly:</b> haricharan $42.10 in last 24h — 4.1σ above 14-day baseline. Three tasks > $10 on <code>nscl-mission</code>. Routed to akshay, cc’d gaurav.',
+          mainTitle: 'Tool subscriptions · justification',
           head: [
             { t: 'tool',     cls: '' },
             { t: 'seats',    cls: 'num' },
@@ -1962,11 +2192,55 @@
             { t: 'verdict',  cls: '' }
           ],
           rows: [
-            { cells: ['Claude Code',    { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$1,180', cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] },
-            { cells: ['Cursor',         { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$220',   cls: 'num' }, '<span class="md-pill-mini verdict-downgrade">downgrade</span>'] },
-            { cells: ['ChatGPT Team',   { v: '5',  cls: 'num' }, { v: '$150', cls: 'num' }, { v: '$48',    cls: 'num' }, '<span class="md-pill-mini verdict-drop">drop</span>'] },
-            { cells: ['Gemini Advanced',{ v: '3',  cls: 'num' }, { v: '$60',  cls: 'num' }, { v: '$92',    cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] }
-          ]
+            { cells: ['Claude Code',     { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$1,180', cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] },
+            { cells: ['Cursor',          { v: '10', cls: 'num' }, { v: '$200', cls: 'num' }, { v: '$220',   cls: 'num' }, '<span class="md-pill-mini verdict-downgrade">downgrade</span>'] },
+            { cells: ['ChatGPT Team',    { v: '5',  cls: 'num' }, { v: '$150', cls: 'num' }, { v: '$48',    cls: 'num' }, '<span class="md-pill-mini verdict-drop">drop</span>'] },
+            { cells: ['Gemini Advanced', { v: '3',  cls: 'num' }, { v: '$60',  cls: 'num' }, { v: '$92',    cls: 'num' }, '<span class="md-pill-mini verdict-keep">keep</span>'] }
+          ],
+          sideA: {
+            title: 'Per-product attribution',
+            bars: [
+              { l: 'circle-chess (chess-be)', v: '$612', pct: 100 },
+              { l: 'NSCL platform',           v: '$358', pct: 58 },
+              { l: 'cc-home / mastery',       v: '$194', pct: 32 },
+              { l: 'cc-learning-app',         v: '$176', pct: 29 },
+              { l: 'infra / ops',             v: '$80',  pct: 13 }
+            ]
+          },
+          sideB: {
+            title: '$/PR proxy · last 30 days',
+            rows: [
+              { l: 'merged PRs',         s: 'across all repos',          v: '38' },
+              { l: 'anchor-matched PRs', s: '82% attribution coverage',  v: '31' },
+              { l: '$/PR · average',     s: 'closest thing to AI ROI',   v: '$37.40' },
+              { l: '$/PR · p90',         s: 'expensive outlier band',    v: '$89.00' }
+            ]
+          },
+          footA: {
+            title: 'Plan utilization · per tool',
+            bars: [
+              { l: 'Claude Code Max', v: '7/8',  pct: 88 },
+              { l: 'Cursor',          v: '6/8',  pct: 75 },
+              { l: 'ChatGPT Team',    v: '1/5',  pct: 20 },
+              { l: 'Gemini Advanced', v: '3/3',  pct: 100 }
+            ]
+          },
+          footB: {
+            title: 'Spend by phase · org',
+            rows: [
+              { l: 'build (CLI tools)', s: 'editor + agent loops',    v: '$1,022' },
+              { l: 'research (web)',    s: 'chat tabs',               v: '$256' },
+              { l: 'review (agents)',   s: 'code-reviewer · security',v: '$142' }
+            ]
+          },
+          footC: {
+            title: 'Cache-saved trend',
+            rows: [
+              { l: 'this week', s: 'covers Cursor bill',  v: '$184' },
+              { l: '4-week avg', s: 'compounding savings', v: '$156' },
+              { l: 'YTD',        s: 'since rollout',       v: '$1,840' }
+            ]
+          }
         }
       };
 
@@ -1976,11 +2250,38 @@
       var mdThead  = document.getElementById('md-thead');
       var mdTbody  = document.getElementById('md-tbody');
 
-      function escapeText(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&':'&amp;', '<':'&lt;', '>':'&gt;' }[c]; }); }
-
       function cellHTML(c) {
         if (typeof c === 'string') return '<td>' + c + '</td>';
         return '<td class="' + (c.cls || '') + '">' + (c.v != null ? c.v : '') + '</td>';
+      }
+
+      function rowHTML(r) {
+        var left = '<div class="md-row-label">' + r.l + (r.s ? '<span class="sub">' + r.s + '</span>' : '') + '</div>';
+        var right = r.v != null ? '<div class="md-row-v ' + (r.vCls || '') + '">' + r.v + '</div>' : '';
+        return '<div class="md-row">' + left + right + '</div>';
+      }
+
+      function barHTML(b) {
+        var pct = Math.max(0, Math.min(100, b.pct || 0));
+        var left = '<div class="md-row-label">' + b.l + '<span class="sub"><span class="md-bar" style="width:120px;display:inline-block;vertical-align:middle;margin-right:8px"><span style="width:' + pct + '%"></span></span></span></div>';
+        var right = b.v != null ? '<div class="md-row-v">' + b.v + '</div>' : '';
+        return '<div class="md-row">' + left + right + '</div>';
+      }
+
+      function renderPanel(panel) {
+        if (!panel) return '';
+        if (panel.bars) return panel.bars.map(barHTML).join('');
+        if (panel.rows) return panel.rows.map(rowHTML).join('');
+        return '';
+      }
+
+      function setText(id, txt) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = txt || '';
+      }
+      function setHTML(id, html) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = html || '';
       }
 
       function paint(role) {
@@ -1990,10 +2291,21 @@
           return '<div class="md-kpi"><div class="md-kpi-v">' + k.v + '</div><div class="md-kpi-l">' + k.l + '</div>' + (k.d ? '<div class="md-kpi-d">' + k.d + '</div>' : '') + '</div>';
         }).join('');
         mdBanner.innerHTML = d.banner;
+        setText('md-main-title', d.mainTitle || 'detail');
         mdThead.innerHTML = '<tr>' + d.head.map(function (h) { return '<th class="' + (h.cls || '') + '">' + h.t + '</th>'; }).join('') + '</tr>';
         mdTbody.innerHTML = d.rows.map(function (r) {
           return '<tr>' + r.cells.map(cellHTML).join('') + '</tr>';
         }).join('');
+        setText('md-sideA-title', d.sideA && d.sideA.title);
+        setHTML('md-sideA', renderPanel(d.sideA));
+        setText('md-sideB-title', d.sideB && d.sideB.title);
+        setHTML('md-sideB', renderPanel(d.sideB));
+        setText('md-footA-title', d.footA && d.footA.title);
+        setHTML('md-footA', renderPanel(d.footA));
+        setText('md-footB-title', d.footB && d.footB.title);
+        setHTML('md-footB', renderPanel(d.footB));
+        setText('md-footC-title', d.footC && d.footC.title);
+        setHTML('md-footC', renderPanel(d.footC));
         minidash.setAttribute('data-role', role);
       }
 
