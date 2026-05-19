@@ -516,6 +516,172 @@
       font-size: 13px;
     }
 
+    /* ---------- slack-mock hero ---------- */
+    .slack {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: perspective(1400px) rotateY(-3deg) rotateX(2deg);
+      transition: transform .35s ease;
+    }
+    .slack:hover { transform: perspective(1400px) rotateY(-1deg) rotateX(0deg); }
+    .slack-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+      position: relative;
+    }
+    .slack-hash {
+      color: var(--text-mute);
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1;
+    }
+    .slack-channel {
+      font-size: 13.5px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .slack-meta {
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin-left: 6px;
+    }
+    .slack-reset {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: transparent; border: 1px solid var(--line);
+      color: var(--text-mute);
+      font-size: 14px; cursor: pointer;
+      width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      transition: color .15s, background .15s, border-color .15s;
+    }
+    .slack-reset:hover { color: var(--text); background: rgba(255,255,255,.05); border-color: rgba(139,124,255,.4); }
+    .slack-body {
+      padding: 18px 18px 6px;
+      min-height: 280px;
+      display: flex; flex-direction: column;
+      gap: 14px;
+    }
+    .slack-msg {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: msgIn .4s ease forwards;
+    }
+    @keyframes msgIn {
+      to { opacity: 1; transform: none; }
+    }
+    .slack-avatar {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #8b7cff, #c084fc);
+      color: #0b0b14;
+      font-weight: 700;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .slack-msg-head {
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .slack-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .slack-role {
+      font-size: 10.5px;
+      letter-spacing: .04em;
+      color: #c0b6ff;
+      background: rgba(139,124,255,.12);
+      border: 1px solid rgba(139,124,255,.3);
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+    .slack-time {
+      font-size: 11.5px;
+      color: var(--text-mute);
+    }
+    .slack-body-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+    .slack-body-text .meta {
+      display: block;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin-top: 4px;
+      font-style: italic;
+    }
+    .slack-typing {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: center;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .slack-typing.on { opacity: 1; }
+    .slack-typing-bubble {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line-soft);
+      padding: 8px 12px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+    .slack-typing-bubble i {
+      display: inline-block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--text-soft);
+      animation: typeDot 1.1s infinite ease-in-out;
+    }
+    .slack-typing-bubble i:nth-child(2) { animation-delay: .18s; }
+    .slack-typing-bubble i:nth-child(3) { animation-delay: .36s; }
+    @keyframes typeDot {
+      0%, 80%, 100% { transform: scale(.6); opacity: .4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .slack-cta {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px 16px;
+      border-top: 1px solid var(--line-soft);
+      background: rgba(139,124,255,.04);
+      font-size: 13px;
+      color: var(--text-soft);
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+    .slack-cta.on { opacity: 1; }
+    .slack-arrow {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(139,124,255,.2);
+      color: #c0b6ff;
+      font-size: 13px;
+      animation: arrowBounce 1.4s infinite ease-in-out;
+    }
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
+    }
+
     /* ---------- interactive CLI in hero ---------- */
     .cli-terminal .terminal-top { position: relative; }
     .cli-reset {
@@ -1447,6 +1613,8 @@
       .calc { padding: 48px 0 24px; }
       .cli { min-height: 280px; }
       .cli-buffer { max-height: 280px; }
+      .slack { transform: none; }
+      .slack-body { min-height: 220px; padding: 14px 14px 6px; }
       .md-kpis { grid-template-columns: repeat(2, 1fr); }
       .md-table thead th { font-size: 9.5px; padding: 8px 10px; }
       .md-table tbody td { padding: 9px 10px; font-size: 12px; }
@@ -1559,8 +1727,8 @@
           <span class="grad">for teams.</span>
         </h1>
         <p class="hero-sub">
-          Every prompt, every dollar, every task — across every AI tool your team uses.
-          <span class="hl">On your machines. Nothing leaves them.</span>
+          Your manager just asked. Your CFO is about to.
+          <span class="hl">Scroll for the answers ↓</span>
         </p>
 
         <form class="waitlist" autocomplete="off">
@@ -1581,29 +1749,19 @@
         </div>
       </div>
 
-      <div class="terminal cli-terminal" role="region" aria-label="Tracepilot interactive demo">
-        <div class="terminal-top">
-          <span class="tdot tdot-r"></span>
-          <span class="tdot tdot-y"></span>
-          <span class="tdot tdot-g"></span>
-          <span class="terminal-title">tracepilot · interactive demo</span>
-          <button class="cli-reset" id="cli-reset" title="replay">↻</button>
+      <div class="slack" id="slack" role="region" aria-label="A manager asks unanswerable questions">
+        <div class="slack-head">
+          <span class="slack-hash">#</span>
+          <span class="slack-channel">eng-mgmt</span>
+          <span class="slack-meta">3 members</span>
+          <button class="slack-reset" id="slack-reset" title="replay" aria-label="Replay">↻</button>
         </div>
-        <div class="cli">
-          <div class="cli-buffer" id="cli-buffer"></div>
-          <div class="cli-prompt-row" id="cli-prompt-row" hidden>
-            <span class="cli-prompt">$</span>
-            <span class="cli-typed" id="cli-typed"></span>
-            <span class="cli-caret"></span>
-          </div>
-          <div class="cli-chips" id="cli-chips" role="group" aria-label="Try a command">
-            <button class="cli-chip" data-cmd="tracepilot today">tracepilot today</button>
-            <button class="cli-chip" data-cmd="tracepilot top">tracepilot top</button>
-            <button class="cli-chip" data-cmd="tracepilot rework">tracepilot rework</button>
-            <button class="cli-chip" data-cmd="tracepilot cache">tracepilot cache</button>
-            <button class="cli-chip" data-cmd="tracepilot $/ticket">tracepilot $/ticket</button>
-            <button class="cli-chip" data-cmd="tracepilot anomaly">tracepilot anomaly</button>
-          </div>
+        <div class="slack-body" id="slack-body">
+          <!-- messages get appended here by JS -->
+        </div>
+        <div class="slack-cta">
+          <span class="slack-arrow">↓</span>
+          <span>Tracepilot answers this in 3 seconds.</span>
         </div>
       </div>
     </section>
@@ -2065,6 +2223,103 @@
         });
       });
 
+      // -------- hero Slack mock (animated) --------
+      var slack = document.getElementById('slack');
+      var slackBody = document.getElementById('slack-body');
+      var slackCta  = slack && slack.querySelector('.slack-cta');
+      var slackReset= document.getElementById('slack-reset');
+      var slackTimers = [];
+      var slackPlayed = false;
+
+      function slackClearTimers() {
+        slackTimers.forEach(clearTimeout);
+        slackTimers = [];
+      }
+
+      function slackMsgHTML(opts) {
+        var role = opts.role ? '<span class="slack-role">' + opts.role + '</span>' : '';
+        var meta = opts.meta ? '<span class="meta">' + opts.meta + '</span>' : '';
+        return '<div class="slack-msg" style="animation-delay:' + (opts.delay || 0) + 'ms">' +
+          '<div class="slack-avatar">' + (opts.avatar || 'M') + '</div>' +
+          '<div>' +
+            '<div class="slack-msg-head">' +
+              '<span class="slack-name">' + opts.name + '</span>' +
+              role +
+              '<span class="slack-time">' + opts.time + '</span>' +
+            '</div>' +
+            '<div class="slack-body-text">' + opts.body + meta + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      function slackTypingHTML() {
+        return '<div class="slack-typing on" id="slack-typing">' +
+          '<div></div>' +
+          '<div class="slack-typing-bubble"><i></i><i></i><i></i></div>' +
+        '</div>';
+      }
+
+      function slackReplay() {
+        slackClearTimers();
+        slackBody.innerHTML = '';
+        if (slackCta) slackCta.classList.remove('on');
+
+        // msg 1
+        slackBody.insertAdjacentHTML('beforeend', slackMsgHTML({
+          avatar: 'M',
+          name: 'Manager',
+          role: 'Engineering Manager',
+          time: 'Wed · 9:14 AM',
+          body: 'Perf reviews next Friday. Need per-dev AI metrics —\n  · tickets closed\n  · rework rate\n  · $/PR shipped\nBy Friday plz.'
+        }));
+
+        // typing indicator
+        slackTimers.push(setTimeout(function () {
+          slackBody.insertAdjacentHTML('beforeend', slackTypingHTML());
+        }, 1500));
+
+        // msg 2 (replaces typing)
+        slackTimers.push(setTimeout(function () {
+          var typing = document.getElementById('slack-typing');
+          if (typing) typing.remove();
+          slackBody.insertAdjacentHTML('beforeend', slackMsgHTML({
+            avatar: 'M',
+            name: 'Manager',
+            role: 'Engineering Manager',
+            time: 'Wed · 1:30 PM',
+            body: 'still digging.\ntools don\'t talk to each other.',
+            meta: '4 hours later'
+          }));
+        }, 3000));
+
+        // reveal scroll CTA
+        slackTimers.push(setTimeout(function () {
+          if (slackCta) slackCta.classList.add('on');
+        }, 3800));
+      }
+
+      if (slack) {
+        if (slackReset) slackReset.addEventListener('click', slackReplay);
+        if ('IntersectionObserver' in window) {
+          var slackIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting && !slackPlayed) {
+                slackPlayed = true;
+                slackReplay();
+                slackIO.disconnect();
+              }
+            });
+          }, { threshold: 0.3 });
+          slackIO.observe(slack);
+        } else {
+          slackReplay();
+        }
+      }
+
+      // -------- (removed) hero CLI (insight-driven, clickable) --------
+      // legacy CLI logic kept dormant in case re-introduced
+      /* eslint-disable */
+      var _legacy_cli_disabled = true;
       // -------- hero CLI (insight-driven, clickable) --------
       var CLI_WELCOME = [
         { cls: 'dim',  t: 'tracepilot v0.1.0 — ask the dashboard a question' },
