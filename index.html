@@ -2463,8 +2463,8 @@
     </section>
 
     <div class="hero-switch" id="hero-switch" role="group" aria-label="Hero style">
-      <button class="hsw-btn active" data-mode="scrolly">Scrolly</button>
-      <button class="hsw-btn"        data-mode="cards">Cards</button>
+      <button class="hsw-btn active" data-mode="cards">Cards</button>
+      <button class="hsw-btn"        data-mode="scrolly">Scrolly</button>
     </div>
 
     <section id="calculator" class="calc">
@@ -2927,10 +2927,10 @@
       // -------- hero style switch (scrolly | cards) --------
       var heroSwitch = document.getElementById('hero-switch');
       var heroMode = (function () {
-        try { return localStorage.getItem('tp_hero_mode') || 'scrolly'; } catch (e) { return 'scrolly'; }
+        try { return localStorage.getItem('tp_hero_mode') || 'cards'; } catch (e) { return 'cards'; }
       })();
       function setHeroMode(mode) {
-        if (mode !== 'cards' && mode !== 'scrolly') mode = 'scrolly';
+        if (mode !== 'cards' && mode !== 'scrolly') mode = 'cards';
         heroMode = mode;
         document.body.setAttribute('data-hero', mode);
         try { localStorage.setItem('tp_hero_mode', mode); } catch (e) {}
