@@ -516,6 +516,316 @@
       font-size: 13px;
     }
 
+    /* ---------- scrollytelling hero ---------- */
+    .hero-scrolly {
+      position: relative;
+      height: 360vh;
+    }
+    .hero-stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .hero-cap {
+      position: absolute;
+      top: clamp(64px, 9vh, 100px);
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      max-width: 760px;
+      width: calc(100% - 32px);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .hero-cap .pill { margin-bottom: 14px; pointer-events: auto; }
+    .hero-h1 {
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      font-weight: 700;
+      margin: 0 0 14px;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .hero-cap .hero-sub {
+      font-size: clamp(15px, 1.4vw, 17px);
+      color: var(--text-soft);
+      max-width: 600px;
+      margin: 0 auto;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .hero-cap.fade-out .hero-h1,
+    .hero-cap.fade-out .hero-sub {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    .hero-scene {
+      position: relative;
+      width: min(820px, 92vw);
+      height: clamp(360px, 56vh, 460px);
+      margin-top: clamp(96px, 14vh, 140px);
+    }
+    .hero-scene > div {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .5s ease, transform .5s ease, filter .5s ease;
+      pointer-events: none;
+    }
+
+    /* ---- tools scene ---- */
+    .scene-tools {
+      pointer-events: none;
+    }
+    .tool {
+      position: absolute;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 10px 14px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--text);
+      box-shadow: 0 10px 30px -12px rgba(0,0,0,.5);
+      transition: opacity .5s ease, transform .6s ease, background .4s ease, border-color .4s ease;
+    }
+    .tool-name { font-weight: 600; color: var(--text); }
+    .tool-cost {
+      font-size: 11px;
+      color: var(--text-mute);
+      letter-spacing: .04em;
+      opacity: 0;
+      transition: opacity .4s ease, color .4s ease;
+    }
+    /* scattered tile positions */
+    .t-1 { top:  8%; left:   2%; transform: rotate(-4deg); }
+    .t-2 { top: 14%; right:  5%; transform: rotate(3deg); }
+    .t-3 { top: 40%; left:  10%; transform: rotate(-2deg); }
+    .t-4 { top: 38%; right: 10%; transform: rotate(2deg); }
+    .t-5 { bottom: 18%; left:  6%; transform: rotate(2deg); }
+    .t-6 { bottom: 8%;  right: 14%; transform: rotate(-3deg); }
+    .t-7 { bottom: 0%;  left: 38%; transform: rotate(1deg); }
+
+    [data-state="1"] .tool .tool-cost { opacity: 1; color: #fca5a5; }
+    [data-state="2"] .tool {
+      opacity: .35;
+      transform: scale(.86) translate(0, 0);
+      filter: blur(.4px);
+    }
+    [data-state="2"] .t-1 { transform: scale(.6) translate(70%, 65%); }
+    [data-state="2"] .t-2 { transform: scale(.6) translate(-70%, 60%); }
+    [data-state="2"] .t-3 { transform: scale(.6) translate(50%, 25%); }
+    [data-state="2"] .t-4 { transform: scale(.6) translate(-50%, 30%); }
+    [data-state="2"] .t-5 { transform: scale(.6) translate(75%, -30%); }
+    [data-state="2"] .t-6 { transform: scale(.6) translate(-60%, -45%); }
+    [data-state="2"] .t-7 { transform: scale(.6) translate(0, -55%); }
+    [data-state="3"] .scene-tools { opacity: 0; transform: scale(.7); }
+
+    /* ---- questions scene ---- */
+    .scene-questions { opacity: 0; }
+    [data-state="1"] .scene-questions { opacity: 1; }
+    [data-state="2"] .scene-questions,
+    [data-state="3"] .scene-questions { opacity: 0; }
+    .q-total {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 22px 36px;
+      border: 1px dashed rgba(248,113,113,.45);
+      border-radius: 14px;
+      background: rgba(248,113,113,.04);
+    }
+    .q-marks {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(46px, 8vw, 78px);
+      color: #fca5a5;
+      letter-spacing: .12em;
+      animation: qPulse 1.4s ease-in-out infinite;
+      line-height: 1;
+    }
+    .q-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+    }
+    @keyframes qPulse {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: .55; }
+    }
+
+    /* ---- converge scene ---- */
+    .scene-converge { opacity: 0; transform: scale(.85); }
+    [data-state="2"] .scene-converge { opacity: 1; transform: scale(1); }
+    [data-state="3"] .scene-converge { opacity: 0; transform: scale(1.05); }
+    .converge-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      stroke-dasharray: 6 4;
+      animation: dashFlow 14s linear infinite;
+    }
+    @keyframes dashFlow { to { stroke-dashoffset: -240; } }
+    .tp-mark {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 26px 36px;
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid rgba(139,124,255,.45);
+      border-radius: 14px;
+      box-shadow: 0 24px 60px -20px rgba(139,124,255,.4);
+    }
+    .tp-glyph {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-size: 28px;
+      text-shadow: 0 0 22px rgba(139,124,255,.55);
+    }
+    .tp-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .tp-tag {
+      font-size: 12px;
+      color: var(--text-mute);
+      letter-spacing: .04em;
+    }
+
+    /* ---- dashboard scene ---- */
+    .scene-dash {
+      opacity: 0;
+      transform: translateY(28px) scale(.97);
+      flex-direction: column !important;
+      gap: 14px;
+      pointer-events: none !important;
+    }
+    [data-state="3"] .scene-dash {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto !important;
+    }
+    .dash-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 680px;
+    }
+    .dash-kpi {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dash-kpi::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, #8b7cff, transparent);
+    }
+    .dash-kpi .v {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.015em;
+      line-height: 1.1;
+    }
+    .dash-kpi .l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      margin-top: 6px;
+    }
+    .dash-banner {
+      width: 100%;
+      max-width: 680px;
+      font-size: 13.5px;
+      color: var(--text);
+      padding: 12px 14px;
+      border: 1px solid rgba(248,113,113,.30);
+      background: rgba(248,113,113,.06);
+      border-radius: var(--radius-sm);
+    }
+    .dash-banner b { color: #fca5a5; }
+    .scene-dash .waitlist {
+      max-width: 460px;
+      width: 100%;
+      margin: 0;
+    }
+    .hero-platforms {
+      font-size: 12.5px;
+      color: var(--text-soft);
+      margin: 0;
+    }
+
+    /* ---- progress dots ---- */
+    .hero-dots {
+      position: absolute;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 6;
+    }
+    .hp-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1px solid var(--text-mute);
+      background: transparent;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease, border-color .2s ease;
+      padding: 0;
+    }
+    .hp-dot:hover { background: rgba(139,124,255,.4); }
+    .hp-dot.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.25);
+      box-shadow: 0 0 12px rgba(139,124,255,.6);
+    }
+
+    /* ---- skip link ---- */
+    .hero-skip {
+      position: absolute;
+      bottom: 16px;
+      right: 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-mute);
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      z-index: 6;
+      transition: color .15s, border-color .15s;
+    }
+    .hero-skip:hover { color: var(--text); border-color: rgba(139,124,255,.45); }
+
     /* ---------- slack-mock hero ---------- */
     .slack {
       background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
@@ -1598,6 +1908,27 @@
     .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
 
     /* ---------- responsive ---------- */
+    /* mobile + reduced-motion → static state 3 */
+    @media (max-width: 920px), (prefers-reduced-motion: reduce) {
+      .hero-scrolly { height: auto; }
+      .hero-stage { position: static; height: auto; padding: 56px 16px 40px; }
+      .hero-cap { position: static; transform: none; margin: 0 auto 24px; width: 100%; }
+      .hero-scene { margin-top: 0; height: auto; }
+      .hero-scene > div { position: static; opacity: 0; height: auto; }
+      .scene-tools { display: none !important; }
+      .scene-questions { display: none !important; }
+      .scene-converge { display: none !important; }
+      .scene-dash {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+        flex-direction: column !important;
+        gap: 12px;
+      }
+      .dash-kpis { grid-template-columns: 1fr 1fr; }
+      .hero-dots, .hero-skip { display: none; }
+    }
+
     @media (max-width: 920px) {
       .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 0 32px; }
       .terminal { transform: none; }
@@ -1716,53 +2047,82 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <span class="pill">
-          <span class="pill-dot"></span>
-          Coming soon · private beta
-        </span>
-        <h1 class="hero-title">
-          The local AI tracker<br/>
-          <span class="grad">for teams.</span>
-        </h1>
-        <p class="hero-sub">
-          Your manager just asked. Your CFO is about to.
-          <span class="hl">Scroll for the answers ↓</span>
-        </p>
+    <section class="hero-scrolly" id="hero-scrolly">
+      <div class="hero-stage" id="hero-stage" data-state="0">
+        <div class="hero-cap">
+          <span class="pill"><span class="pill-dot"></span>Coming soon · private beta</span>
+          <h1 class="hero-h1" id="hero-h1">7 AI tools.</h1>
+          <p class="hero-sub" id="hero-sub-text">Different stores. Different bills. <span class="hl">Nobody talks to each other.</span></p>
+        </div>
 
-        <form class="waitlist" autocomplete="off">
-          <input type="email" name="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
-          <button type="submit">
-            <span>Join waitlist</span>
-            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h12m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </form>
-        <p class="waitlist-note">No spam. One email when the beta opens.</p>
+        <div class="hero-scene">
+          <!-- State 0+1+2: scattered tool tiles -->
+          <div class="scene-tools" aria-hidden="true">
+            <span class="tool t-1"><span class="tool-name">Claude Code</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-2"><span class="tool-name">Cursor</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-3"><span class="tool-name">ChatGPT</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-4"><span class="tool-name">Claude.ai</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-5"><span class="tool-name">Perplexity</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-6"><span class="tool-name">Gemini</span><span class="tool-cost">$?</span></span>
+            <span class="tool t-7"><span class="tool-name">Antigravity</span><span class="tool-cost">$?</span></span>
+          </div>
 
-        <div class="hero-meta">
-          <span><span class="dot dot-g"></span> macOS</span>
-          <span><span class="dot dot-g"></span> Windows</span>
-          <span><span class="dot dot-g"></span> Linux</span>
-          <span class="sep">·</span>
-          <span class="mono">single Rust binary</span>
-        </div>
-      </div>
+          <!-- State 1: question marks total -->
+          <div class="scene-questions" aria-hidden="true">
+            <div class="q-total">
+              <span class="q-marks">???</span>
+              <span class="q-label">total this month</span>
+            </div>
+          </div>
 
-      <div class="slack" id="slack" role="region" aria-label="A manager asks unanswerable questions">
-        <div class="slack-head">
-          <span class="slack-hash">#</span>
-          <span class="slack-channel">eng-mgmt</span>
-          <span class="slack-meta">3 members</span>
-          <button class="slack-reset" id="slack-reset" title="replay" aria-label="Replay">↻</button>
+          <!-- State 2: tracepilot logo converges -->
+          <div class="scene-converge" aria-hidden="true">
+            <svg class="converge-lines" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true">
+              <g stroke="rgba(139,124,255,.5)" stroke-width="1" fill="none">
+                <line x1="60"  y1="80"  x2="300" y2="200" />
+                <line x1="540" y1="80"  x2="300" y2="200" />
+                <line x1="60"  y1="320" x2="300" y2="200" />
+                <line x1="540" y1="320" x2="300" y2="200" />
+                <line x1="120" y1="200" x2="300" y2="200" />
+                <line x1="480" y1="200" x2="300" y2="200" />
+                <line x1="300" y1="40"  x2="300" y2="200" />
+              </g>
+            </svg>
+            <div class="tp-mark">
+              <span class="tp-glyph">◢◤</span>
+              <span class="tp-name">tracepilot</span>
+              <span class="tp-tag">local · reading every store</span>
+            </div>
+          </div>
+
+          <!-- State 3: dashboard reveal + form -->
+          <div class="scene-dash" aria-hidden="true">
+            <div class="dash-kpis">
+              <div class="dash-kpi"><div class="v">$1,420</div><div class="l">forecast</div></div>
+              <div class="dash-kpi"><div class="v">22%</div><div class="l">rework</div></div>
+              <div class="dash-kpi"><div class="v">$184</div><div class="l">cache-saved</div></div>
+              <div class="dash-kpi"><div class="v">79%</div><div class="l">plan util</div></div>
+            </div>
+            <div class="dash-banner">⚠ <b>haricharan spike</b> · $42.10 in 24h · 4.1σ above baseline · routed to akshay</div>
+            <form class="waitlist" autocomplete="off">
+              <input type="email" name="email" placeholder="you@yourdomain.com" required aria-label="Email address" />
+              <button type="submit">
+                <span>Join waitlist</span>
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1 8h12m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </form>
+            <p class="hero-platforms"><span class="dot dot-g"></span> macOS · Windows · Linux · <span class="mono">single Rust binary</span></p>
+          </div>
         </div>
-        <div class="slack-body" id="slack-body">
-          <!-- messages get appended here by JS -->
+
+        <div class="hero-dots" role="tablist" aria-label="Story progress">
+          <button class="hp-dot active" data-state="0" aria-label="State 1: chaos"></button>
+          <button class="hp-dot" data-state="1" aria-label="State 2: unanswered"></button>
+          <button class="hp-dot" data-state="2" aria-label="State 3: convergence"></button>
+          <button class="hp-dot" data-state="3" aria-label="State 4: answers"></button>
         </div>
-        <div class="slack-cta">
-          <span class="slack-arrow">↓</span>
-          <span>Tracepilot answers this in 3 seconds.</span>
-        </div>
+
+        <a class="hero-skip" href="#calculator" aria-label="Skip animation">↓ skip</a>
       </div>
     </section>
 
@@ -2223,7 +2583,97 @@
         });
       });
 
-      // -------- hero Slack mock (animated) --------
+      // -------- scrollytelling hero --------
+      var heroScrolly = document.getElementById('hero-scrolly');
+      var heroStage   = document.getElementById('hero-stage');
+      var heroH1      = document.getElementById('hero-h1');
+      var heroSubT    = document.getElementById('hero-sub-text');
+      var heroDots    = heroStage ? heroStage.querySelectorAll('.hp-dot') : [];
+
+      var HERO_CAPS = [
+        { h1: '7 AI tools.',                       sub: 'Different stores. Different bills. <span class="hl">Nobody talks to each other.</span>' },
+        { h1: 'Your CFO just asked.',              sub: 'How much went where? Who used what? <span class="hl">You\'re guessing.</span>' },
+        { h1: 'Tracepilot reads them all. Locally.', sub: 'One daemon. SQLite at <code>~/.tracepilot/</code>. <span class="hl">Nothing leaves your machines.</span>' },
+        { h1: 'Your CFO has answers.',             sub: 'Every prompt, every dollar, every task — <span class="hl">for every dev</span>.' }
+      ];
+
+      var heroLastState = -1;
+      function setHeroState(s) {
+        if (!heroStage) return;
+        s = Math.max(0, Math.min(3, s));
+        if (s === heroLastState) return;
+        heroLastState = s;
+        heroStage.setAttribute('data-state', String(s));
+        if (heroH1)   heroH1.textContent = HERO_CAPS[s].h1;
+        if (heroSubT) heroSubT.innerHTML = HERO_CAPS[s].sub;
+        heroDots.forEach(function (d) {
+          d.classList.toggle('active', d.getAttribute('data-state') === String(s));
+        });
+      }
+
+      var mqSmall = window.matchMedia('(max-width: 920px)');
+      var mqRm    = window.matchMedia('(prefers-reduced-motion: reduce)');
+      function isStaticMode() { return mqSmall.matches || mqRm.matches; }
+
+      function onScrollHero() {
+        if (!heroScrolly || isStaticMode()) return;
+        var rect = heroScrolly.getBoundingClientRect();
+        var total = heroScrolly.offsetHeight - window.innerHeight;
+        if (total <= 0) return;
+        // progress 0..1 across the scrolly runway
+        var progress = Math.max(0, Math.min(1, -rect.top / total));
+        // map to 4 states with a small bias toward earlier ones so caption changes feel timely
+        var s;
+        if (progress < 0.20)      s = 0;
+        else if (progress < 0.45) s = 1;
+        else if (progress < 0.72) s = 2;
+        else                      s = 3;
+        setHeroState(s);
+      }
+
+      if (heroScrolly) {
+        if (isStaticMode()) {
+          setHeroState(3);
+        } else {
+          setHeroState(0);
+          var rafScheduled = false;
+          window.addEventListener('scroll', function () {
+            if (rafScheduled) return;
+            rafScheduled = true;
+            requestAnimationFrame(function () {
+              rafScheduled = false;
+              onScrollHero();
+            });
+          }, { passive: true });
+          window.addEventListener('resize', onScrollHero);
+          onScrollHero();
+        }
+
+        heroDots.forEach(function (d) {
+          d.addEventListener('click', function () {
+            var s = parseInt(d.getAttribute('data-state'), 10);
+            if (isStaticMode()) return;
+            var total = heroScrolly.offsetHeight - window.innerHeight;
+            // map state → scrollY relative to scrolly start
+            var startY = heroScrolly.getBoundingClientRect().top + window.scrollY;
+            var fracs = [0.05, 0.30, 0.55, 0.85];
+            var targetY = startY + total * fracs[s];
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
+          });
+        });
+
+        // adapt on viewport flip
+        var onMqChange = function () {
+          if (isStaticMode()) setHeroState(3);
+          else onScrollHero();
+        };
+        if (mqSmall.addEventListener) {
+          mqSmall.addEventListener('change', onMqChange);
+          mqRm.addEventListener('change', onMqChange);
+        }
+      }
+
+      // -------- legacy Slack mock (no-op if elements missing) --------
       var slack = document.getElementById('slack');
       var slackBody = document.getElementById('slack-body');
       var slackCta  = slack && slack.querySelector('.slack-cta');
