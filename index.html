@@ -516,6 +516,187 @@
       font-size: 13px;
     }
 
+    /* ---------- interactive CLI in hero ---------- */
+    .cli-terminal .terminal-top { position: relative; }
+    .cli-reset {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: transparent; border: 1px solid var(--line);
+      color: var(--text-mute);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; cursor: pointer;
+      width: 26px; height: 26px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      transition: color .15s, background .15s, border-color .15s;
+    }
+    .cli-reset:hover { color: var(--text); background: rgba(255,255,255,.05); border-color: rgba(139,124,255,.4); }
+    .cli {
+      display: flex; flex-direction: column;
+      min-height: 360px;
+    }
+    .cli-buffer {
+      flex: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      padding: 16px 18px 8px;
+      color: #d6d6e0;
+      overflow-y: auto;
+      line-height: 1.62;
+      max-height: 360px;
+      scrollbar-width: thin;
+    }
+    .cli-buffer::-webkit-scrollbar { width: 6px; }
+    .cli-buffer::-webkit-scrollbar-thumb { background: rgba(139,124,255,.2); border-radius: 4px; }
+    .cli-line { display: block; white-space: pre-wrap; }
+    .cli-line.in   { color: var(--accent); }
+    .cli-line.muted{ color: var(--text-mute); }
+    .cli-line.ok   { color: #86efac; }
+    .cli-line.warn { color: #fcd34d; }
+    .cli-line.bad  { color: #fca5a5; }
+    .cli-line.dim  { color: #8a8aa0; }
+    .cli-prompt-row {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      padding: 2px 18px 8px;
+      color: #d6d6e0;
+      display: flex; gap: 8px; align-items: center;
+    }
+    .cli-prompt { color: var(--accent); }
+    .cli-caret {
+      display: inline-block;
+      width: 7px; height: 14px;
+      background: var(--accent);
+      animation: caretblink .9s steps(2) infinite;
+    }
+    @keyframes caretblink { 50% { opacity: 0; } }
+    .cli-chips {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line-soft);
+      background: rgba(0,0,0,.18);
+    }
+    .cli-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: rgba(139,124,255,.10);
+      border: 1px solid rgba(139,124,255,.25);
+      color: #c0b6ff;
+      padding: 6px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit; font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease, opacity .15s ease;
+    }
+    .cli-chip:hover { background: rgba(139,124,255,.18); border-color: rgba(139,124,255,.4); }
+    .cli-chip:active { transform: translateY(1px); }
+    .cli-chip:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ---------- cost calculator ---------- */
+    .calc { padding: 64px 0 32px; }
+    .calc-head { max-width: 760px; margin-bottom: 24px; }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+      gap: 16px;
+    }
+    .calc-inputs, .calc-output {
+      background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .calc-inputs { display: flex; flex-direction: column; gap: 18px; }
+    .calc-field label {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px; color: var(--text-soft); margin-bottom: 10px;
+    }
+    .calc-val {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text);
+      font-size: 13.5px;
+    }
+    .calc-field input[type=range] {
+      width: 100%;
+      accent-color: #8b7cff;
+      background: transparent;
+    }
+    .calc-chips {
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .calc-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: var(--text-soft);
+      padding: 5px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .calc-chip:hover { color: var(--text); border-color: rgba(139,124,255,.4); }
+    .calc-chip.active {
+      background: rgba(139,124,255,.18);
+      border-color: rgba(139,124,255,.45);
+      color: #d6d0ff;
+    }
+
+    .calc-output-head {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12.5px; color: var(--text-mute);
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .calc-kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .calc-output .md-kpi {
+      padding: 12px 12px;
+      border: 1px solid var(--line-soft);
+      background: rgba(255,255,255,.02);
+      border-radius: var(--radius-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .calc-output .md-kpi::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, #8b7cff, transparent);
+    }
+    .calc-output .md-kpi-v {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+    .calc-output .md-kpi-l {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      margin-top: 4px;
+    }
+    .calc-banner {
+      font-size: 13.5px;
+      color: var(--text-soft);
+      padding: 12px 14px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      background: rgba(139,124,255,.06);
+    }
+    .calc-banner b { color: var(--text); font-weight: 600; }
+    .calc-note {
+      font-size: 11.5px;
+      color: var(--text-mute);
+      margin-top: 12px;
+      text-align: right;
+    }
+
     /* ---------- pillars ---------- */
     .pillars { padding: 80px 0 32px; }
     .pillars-head { max-width: 760px; margin-bottom: 32px; }
@@ -1261,6 +1442,11 @@
       .personas-solo { grid-template-columns: 1fr; }
       .pillar-grid { grid-template-columns: 1fr; }
       .pillars { padding: 56px 0 16px; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .calc-kpis { grid-template-columns: repeat(2, 1fr); }
+      .calc { padding: 48px 0 24px; }
+      .cli { min-height: 280px; }
+      .cli-buffer { max-height: 280px; }
       .md-kpis { grid-template-columns: repeat(2, 1fr); }
       .md-table thead th { font-size: 9.5px; padding: 8px 10px; }
       .md-table tbody td { padding: 9px 10px; font-size: 12px; }
@@ -1289,6 +1475,10 @@
       .md-footer { grid-template-columns: 1fr; }
       .md-grid { gap: 10px; }
       .md-row { font-size: 12px; padding: 7px 10px; }
+      .calc-kpis { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .calc-output .md-kpi-v { font-size: 16px; }
+      .cli-chip { font-size: 11px; padding: 5px 9px; }
+      .cli-buffer { font-size: 11.5px; padding: 12px 14px 6px; }
       .features, .how { padding: 64px 0 16px; }
       .cta { padding: 64px 0; }
       .row { grid-template-columns: 1.4fr .8fr .6fr .6fr; padding: 10px 14px; font-size: 12.5px; gap: 6px; }
@@ -1391,50 +1581,79 @@
         </div>
       </div>
 
-      <div class="terminal" role="img" aria-label="Tracepilot dashboard preview">
+      <div class="terminal cli-terminal" role="region" aria-label="Tracepilot interactive demo">
         <div class="terminal-top">
           <span class="tdot tdot-r"></span>
           <span class="tdot tdot-y"></span>
           <span class="tdot tdot-g"></span>
-          <span class="terminal-title">tracepilot · localhost:4321</span>
+          <span class="terminal-title">tracepilot · interactive demo</span>
+          <button class="cli-reset" id="cli-reset" title="replay">↻</button>
         </div>
-        <div class="terminal-body">
-          <div class="row row-head">
-            <span>task</span>
-            <span>tool</span>
-            <span>tokens</span>
-            <span>cost</span>
+        <div class="cli">
+          <div class="cli-buffer" id="cli-buffer"></div>
+          <div class="cli-prompt-row" id="cli-prompt-row" hidden>
+            <span class="cli-prompt">$</span>
+            <span class="cli-typed" id="cli-typed"></span>
+            <span class="cli-caret"></span>
           </div>
-          <div class="row">
-            <span class="t-name">Refactor stitcher to use SeenStore</span>
-            <span class="badge b-claude">Claude Code</span>
-            <span class="mono">42.1k</span>
-            <span class="mono">$0.18</span>
+          <div class="cli-chips" id="cli-chips" role="group" aria-label="Try a command">
+            <button class="cli-chip" data-cmd="tracepilot start">tracepilot start</button>
+            <button class="cli-chip" data-cmd="tracepilot status">tracepilot status</button>
+            <button class="cli-chip" data-cmd="tracepilot traces">tracepilot traces</button>
+            <button class="cli-chip" data-cmd="tracepilot apps">tracepilot apps</button>
+            <button class="cli-chip" data-cmd="tracepilot doctor">tracepilot doctor</button>
+            <button class="cli-chip" data-cmd="tracepilot proxy enable">tracepilot proxy enable</button>
           </div>
-          <div class="row">
-            <span class="t-name">Investigate slow /api/tasks query</span>
-            <span class="badge b-cursor">Cursor</span>
-            <span class="mono">8.4k</span>
-            <span class="mono">~$0.04</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="calculator" class="calc">
+      <div class="calc-head">
+        <h2 class="section-title">See your team's number.</h2>
+        <p class="section-sub">Drag the sliders. No installation.</p>
+      </div>
+
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="calc-field">
+            <label>Team size <span class="calc-val" id="calc-team-val">5</span></label>
+            <input type="range" min="1" max="50" value="5" id="calc-team" aria-label="Team size" />
           </div>
-          <div class="row">
-            <span class="t-name">Write landing page copy</span>
-            <span class="badge b-copilot">Copilot</span>
-            <span class="mono">1.9k</span>
-            <span class="mono">$0.01</span>
+          <div class="calc-field">
+            <label>Monthly AI spend <span class="calc-val" id="calc-spend-val">$1,200</span></label>
+            <input type="range" min="0" max="5000" step="50" value="1200" id="calc-spend" aria-label="Monthly AI spend in dollars" />
           </div>
-          <div class="row">
-            <span class="t-name">Debug 401 from OTA dashboard</span>
-            <span class="badge b-antigrav">Antigravity</span>
-            <span class="mono">12.0k</span>
-            <span class="mono">$0.06</span>
+          <div class="calc-field">
+            <label>Tools you pay for</label>
+            <div class="calc-chips" id="calc-tools">
+              <button class="calc-chip active" data-tool="claude-code">Claude Code</button>
+              <button class="calc-chip active" data-tool="cursor">Cursor</button>
+              <button class="calc-chip" data-tool="copilot">Copilot</button>
+              <button class="calc-chip active" data-tool="chatgpt">ChatGPT</button>
+              <button class="calc-chip" data-tool="claude-ai">Claude.ai</button>
+              <button class="calc-chip" data-tool="perplexity">Perplexity</button>
+              <button class="calc-chip" data-tool="gemini">Gemini</button>
+            </div>
           </div>
-          <div class="row row-total">
-            <span>today</span>
-            <span></span>
-            <span class="mono">64.4k</span>
-            <span class="mono">$0.29</span>
+        </div>
+
+        <div class="calc-output">
+          <div class="calc-output-head">
+            <span class="md-mark">◢◤</span>
+            <span class="mono">your dashboard · estimated</span>
+            <span class="md-demo">live</span>
           </div>
+          <div class="calc-kpis">
+            <div class="md-kpi"><div class="md-kpi-v" id="kpi-forecast">$1,260</div><div class="md-kpi-l">forecast / mo</div></div>
+            <div class="md-kpi"><div class="md-kpi-v" id="kpi-rework">$264</div><div class="md-kpi-l">rework waste</div></div>
+            <div class="md-kpi"><div class="md-kpi-v" id="kpi-cache">$120</div><div class="md-kpi-l">cache savings</div></div>
+            <div class="md-kpi"><div class="md-kpi-v" id="kpi-drop">ChatGPT</div><div class="md-kpi-l">drop candidate</div></div>
+          </div>
+          <div class="calc-banner" id="calc-banner">
+            Top dev likely burns <b>$384</b>/mo · most expensive ticket ~<b>$60</b> · drop ChatGPT to save <b>$48</b>/mo.
+          </div>
+          <div class="calc-note">Heuristics from beta data. Install Tracepilot to see your actual numbers.</div>
         </div>
       </div>
     </section>
@@ -1845,6 +2064,191 @@
           });
         });
       });
+
+      // -------- hero CLI (clickable commands) --------
+      var CLI_WELCOME = [
+        { cls: 'dim',  t: 'tracepilot v0.1.0 — local AI tracker for teams' },
+        { cls: 'dim',  t: 'click a command below to try.' },
+        { cls: 'dim',  t: '' }
+      ];
+      var CLI_CMDS = {
+        'tracepilot start': [
+          { cls: 'ok',    t: '✓ watching ~/.claude/projects/  (5 sessions)' },
+          { cls: 'ok',    t: '✓ watching Cursor workspaceStorage  (12 tabs)' },
+          { cls: 'ok',    t: '✓ watching ChatGPT, Claude.ai, Perplexity  (browser)' },
+          { cls: 'ok',    t: '✓ SQLite at ~/.tracepilot/traces.db' },
+          { cls: '',     t: '' },
+          { cls: '',     t: 'tracepilot is running.' },
+          { cls: 'dim',   t: 'dashboard: http://localhost:4321' }
+        ],
+        'tracepilot status': [
+          { cls: '',     t: 'running     : true' },
+          { cls: '',     t: 'version     : 0.1.0' },
+          { cls: '',     t: 'uptime      : 4h 22m' },
+          { cls: '',     t: 'watchers    : 4 active' },
+          { cls: '',     t: 'proxy       : disabled' },
+          { cls: 'ok',    t: 'traces today: 47' }
+        ],
+        'tracepilot traces': [
+          { cls: 'dim',   t: 'time      tool          tokens    cost' },
+          { cls: 'dim',   t: '────────  ────────────  ────────  ──────' },
+          { cls: '',     t: '14:22     claude-code    42.1k    $0.18' },
+          { cls: '',     t: '11:03     cursor          8.4k    $0.04' },
+          { cls: '',     t: '10:14     chatgpt         2.1k    $0.02' },
+          { cls: '',     t: '09:45     perplexity      1.4k    $0.01' },
+          { cls: '',     t: '' },
+          { cls: 'ok',    t: '4 traces shown.  today total: $0.29' }
+        ],
+        'tracepilot apps': [
+          { cls: 'ok',    t: '✓ claude-code   enabled · file-watch' },
+          { cls: 'ok',    t: '✓ cursor        enabled · file-watch' },
+          { cls: 'ok',    t: '✓ antigravity   enabled · file-watch' },
+          { cls: 'dim',   t: '○ chatgpt       proxy   · disabled' },
+          { cls: 'dim',   t: '○ perplexity    proxy   · disabled' }
+        ],
+        'tracepilot doctor': [
+          { cls: 'ok',    t: '✓ ~/.tracepilot/ exists' },
+          { cls: 'ok',    t: '✓ traces.db readable' },
+          { cls: 'ok',    t: '✓ no stale proxy state' },
+          { cls: 'ok',    t: '✓ all watchers reporting' },
+          { cls: '',     t: '' },
+          { cls: 'ok',    t: 'everything looks good.' }
+        ],
+        'tracepilot proxy enable': [
+          { cls: 'dim',   t: '→ writing ~/.tracepilot/proxy.enabled' },
+          { cls: 'dim',   t: '→ installing CA to login keychain  (no sudo)' },
+          { cls: 'dim',   t: '→ enabling system proxy on every active service' },
+          { cls: 'dim',   t: '→ launchctl setenv HTTPS_PROXY=http://127.0.0.1:8443' },
+          { cls: 'dim',   t: '→ patching Cursor + VS Code settings' },
+          { cls: '',     t: '' },
+          { cls: 'ok',    t: '✓ proxy enabled on :8443' },
+          { cls: 'warn',  t: 'restart your AI apps to pick up the proxy.' }
+        ]
+      };
+
+      var cliBuffer  = document.getElementById('cli-buffer');
+      var cliPrompt  = document.getElementById('cli-prompt-row');
+      var cliTyped   = document.getElementById('cli-typed');
+      var cliChips   = document.getElementById('cli-chips');
+      var cliReset   = document.getElementById('cli-reset');
+      var cliBusy    = false;
+
+      function cliAppend(line) {
+        var el = document.createElement('span');
+        el.className = 'cli-line ' + (line.cls || '');
+        el.textContent = line.t;
+        cliBuffer.appendChild(el);
+        cliBuffer.appendChild(document.createElement('br'));
+        cliBuffer.scrollTop = cliBuffer.scrollHeight;
+      }
+      function cliClear() {
+        cliBuffer.innerHTML = '';
+        CLI_WELCOME.forEach(cliAppend);
+      }
+      function setChipsDisabled(d) {
+        cliChips.querySelectorAll('.cli-chip').forEach(function (b) { b.disabled = d; });
+      }
+      function delay(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+      async function runCommand(cmd) {
+        if (cliBusy) return;
+        cliBusy = true;
+        setChipsDisabled(true);
+
+        // type the command into the prompt
+        cliPrompt.removeAttribute('hidden');
+        cliTyped.textContent = '';
+        for (var i = 0; i < cmd.length; i++) {
+          cliTyped.textContent = cmd.slice(0, i + 1);
+          await delay(22);
+        }
+        await delay(180);
+        cliPrompt.setAttribute('hidden', '');
+        cliAppend({ cls: 'in', t: '$ ' + cmd });
+
+        var out = CLI_CMDS[cmd];
+        if (out) {
+          for (var j = 0; j < out.length; j++) {
+            cliAppend(out[j]);
+            await delay(42);
+          }
+        } else {
+          cliAppend({ cls: 'warn', t: "tracepilot: '" + cmd + "' is not a command. try 'help'." });
+        }
+        cliAppend({ cls: '', t: '' });
+        setChipsDisabled(false);
+        cliBusy = false;
+      }
+
+      if (cliBuffer) {
+        cliClear();
+        cliChips.querySelectorAll('.cli-chip').forEach(function (b) {
+          b.addEventListener('click', function () { runCommand(b.dataset.cmd); });
+        });
+        if (cliReset) cliReset.addEventListener('click', function () { if (!cliBusy) cliClear(); });
+      }
+
+      // -------- cost calculator --------
+      var calc = {
+        team:    document.getElementById('calc-team'),
+        teamV:   document.getElementById('calc-team-val'),
+        spend:   document.getElementById('calc-spend'),
+        spendV:  document.getElementById('calc-spend-val'),
+        tools:   document.getElementById('calc-tools'),
+        fcst:    document.getElementById('kpi-forecast'),
+        rwk:     document.getElementById('kpi-rework'),
+        cache:   document.getElementById('kpi-cache'),
+        drop:    document.getElementById('kpi-drop'),
+        banner:  document.getElementById('calc-banner')
+      };
+
+      function fmt$(n) { return '$' + Math.round(n).toLocaleString(); }
+
+      function calcUpdate() {
+        if (!calc.team || !calc.spend) return;
+        var team  = +calc.team.value;
+        var spend = +calc.spend.value;
+        var activeTools = Array.prototype.slice.call(calc.tools.querySelectorAll('.calc-chip.active')).map(function (b) { return b.getAttribute('data-tool'); });
+
+        calc.teamV.textContent  = team;
+        calc.spendV.textContent = fmt$(spend);
+
+        var forecast = spend * 1.05;
+        var rework   = spend * 0.22;
+        var cache    = spend * 0.10;
+        var topDev   = team > 0 ? (spend / team) * 1.6 : 0;
+        var topTicket= spend * 0.05;
+
+        var drop = '—', dropSave = 0;
+        if (activeTools.indexOf('chatgpt')    !== -1 && activeTools.indexOf('claude-ai') !== -1) { drop = 'ChatGPT'; dropSave = Math.round(spend * 0.04); }
+        else if (activeTools.indexOf('perplexity') !== -1 && activeTools.indexOf('gemini') !== -1) { drop = 'Perplexity'; dropSave = Math.round(spend * 0.02); }
+        else if (activeTools.indexOf('copilot') !== -1 && activeTools.indexOf('cursor')    !== -1) { drop = 'Copilot'; dropSave = Math.round(spend * 0.03); }
+        else if (activeTools.length > 4) { drop = 'review mix'; dropSave = Math.round(spend * 0.03); }
+        else { drop = '✓ tight'; dropSave = 0; }
+
+        calc.fcst.textContent  = fmt$(forecast);
+        calc.rwk.textContent   = fmt$(rework);
+        calc.cache.textContent = fmt$(cache);
+        calc.drop.textContent  = drop;
+
+        var dropLine = dropSave > 0
+          ? 'drop <b>' + drop + '</b> to save <b>' + fmt$(dropSave) + '</b>/mo'
+          : 'tool mix looks tight';
+        calc.banner.innerHTML = 'Top dev likely burns <b>' + fmt$(topDev) + '</b>/mo · most expensive ticket likely ~<b>' + fmt$(topTicket) + '</b> · ' + dropLine + '.';
+      }
+
+      if (calc.team && calc.spend) {
+        calc.team.addEventListener('input', calcUpdate);
+        calc.spend.addEventListener('input', calcUpdate);
+        calc.tools.addEventListener('click', function (e) {
+          var t = e.target;
+          if (t && t.classList && t.classList.contains('calc-chip')) {
+            t.classList.toggle('active');
+            calcUpdate();
+          }
+        });
+        calcUpdate();
+      }
 
       // -------- mini dashboard (role-switching) --------
       var TOOL_PILL = {
