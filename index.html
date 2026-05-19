@@ -1597,12 +1597,12 @@
             <span class="cli-caret"></span>
           </div>
           <div class="cli-chips" id="cli-chips" role="group" aria-label="Try a command">
-            <button class="cli-chip" data-cmd="tracepilot start">tracepilot start</button>
-            <button class="cli-chip" data-cmd="tracepilot status">tracepilot status</button>
-            <button class="cli-chip" data-cmd="tracepilot traces">tracepilot traces</button>
-            <button class="cli-chip" data-cmd="tracepilot apps">tracepilot apps</button>
-            <button class="cli-chip" data-cmd="tracepilot doctor">tracepilot doctor</button>
-            <button class="cli-chip" data-cmd="tracepilot proxy enable">tracepilot proxy enable</button>
+            <button class="cli-chip" data-cmd="tracepilot today">tracepilot today</button>
+            <button class="cli-chip" data-cmd="tracepilot top">tracepilot top</button>
+            <button class="cli-chip" data-cmd="tracepilot rework">tracepilot rework</button>
+            <button class="cli-chip" data-cmd="tracepilot cache">tracepilot cache</button>
+            <button class="cli-chip" data-cmd="tracepilot $/ticket">tracepilot $/ticket</button>
+            <button class="cli-chip" data-cmd="tracepilot anomaly">tracepilot anomaly</button>
           </div>
         </div>
       </div>
@@ -2065,64 +2065,73 @@
         });
       });
 
-      // -------- hero CLI (clickable commands) --------
+      // -------- hero CLI (insight-driven, clickable) --------
       var CLI_WELCOME = [
-        { cls: 'dim',  t: 'tracepilot v0.1.0 — local AI tracker for teams' },
-        { cls: 'dim',  t: 'click a command below to try.' },
-        { cls: 'dim',  t: '' }
+        { cls: 'dim',  t: 'tracepilot v0.1.0 — ask the dashboard a question' },
+        { cls: 'dim',  t: 'click any command below.  ↻ to replay.' },
+        { cls: '',     t: '' }
       ];
       var CLI_CMDS = {
-        'tracepilot start': [
-          { cls: 'ok',    t: '✓ watching ~/.claude/projects/  (5 sessions)' },
-          { cls: 'ok',    t: '✓ watching Cursor workspaceStorage  (12 tabs)' },
-          { cls: 'ok',    t: '✓ watching ChatGPT, Claude.ai, Perplexity  (browser)' },
-          { cls: 'ok',    t: '✓ SQLite at ~/.tracepilot/traces.db' },
-          { cls: '',     t: '' },
-          { cls: '',     t: 'tracepilot is running.' },
-          { cls: 'dim',   t: 'dashboard: http://localhost:4321' }
+        'tracepilot today': [
+          { cls: 'dim',   t: 'saumitra · today · 142 tasks' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: '',      t: 'spend            $48.20      ▼ 14% vs yesterday' },
+          { cls: 'warn',  t: 'rework rate      22%         31/142 prompts debug-shaped' },
+          { cls: 'ok',    t: 'cache hit        71%         saved $11.40 vs no cache' },
+          { cls: '',      t: 'first-prompt     38%         54 tasks closed in 1 turn' },
+          { cls: '',      t: 'top task         $8.83       pawn promotion trace · 35 turns' }
         ],
-        'tracepilot status': [
-          { cls: '',     t: 'running     : true' },
-          { cls: '',     t: 'version     : 0.1.0' },
-          { cls: '',     t: 'uptime      : 4h 22m' },
-          { cls: '',     t: 'watchers    : 4 active' },
-          { cls: '',     t: 'proxy       : disabled' },
-          { cls: 'ok',    t: 'traces today: 47' }
+        'tracepilot top': [
+          { cls: 'dim',   t: 'top expensive tasks · last 7 days' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'bad',   t: '$14.20  refactor mission progress pipeline   haricharan  82t' },
+          { cls: '',      t: '$11.80  NSCL battle socket reconnect storm   nitendra    67t' },
+          { cls: '',      t: ' $9.40  mastery series payment race fix      balaji      54t' },
+          { cls: '',      t: ' $8.83  trace pawn promotion code path       saumitra    35t' },
+          { cls: '',      t: ' $6.10  research vector store options        abhijeet    12t' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'dim',   t: 'click a row to drill into the full trace.' }
         ],
-        'tracepilot traces': [
-          { cls: 'dim',   t: 'time      tool          tokens    cost' },
-          { cls: 'dim',   t: '────────  ────────────  ────────  ──────' },
-          { cls: '',     t: '14:22     claude-code    42.1k    $0.18' },
-          { cls: '',     t: '11:03     cursor          8.4k    $0.04' },
-          { cls: '',     t: '10:14     chatgpt         2.1k    $0.02' },
-          { cls: '',     t: '09:45     perplexity      1.4k    $0.01' },
-          { cls: '',     t: '' },
-          { cls: 'ok',    t: '4 traces shown.  today total: $0.29' }
+        'tracepilot rework': [
+          { cls: 'dim',   t: 'per-dev rework rate · last 7 days' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'warn',  t: 'saumitra       22%   ⚠   31 / 142' },
+          { cls: 'ok',    t: 'nitendra       14%   ✓   24 / 168' },
+          { cls: 'warn',  t: 'abhijeet       29%   ⚠   21 /  71' },
+          { cls: 'bad',   t: 'haricharan     44%   ✗   above p90 — pair w/ nitendra?' },
+          { cls: 'bad',   t: 'balaji         41%   ✗   above p90' },
+          { cls: 'ok',    t: 'subhojeet      16%   ✓   14 /  88' },
+          { cls: 'ok',    t: 'shivam         11%   ★   best in team' }
         ],
-        'tracepilot apps': [
-          { cls: 'ok',    t: '✓ claude-code   enabled · file-watch' },
-          { cls: 'ok',    t: '✓ cursor        enabled · file-watch' },
-          { cls: 'ok',    t: '✓ antigravity   enabled · file-watch' },
-          { cls: 'dim',   t: '○ chatgpt       proxy   · disabled' },
-          { cls: 'dim',   t: '○ perplexity    proxy   · disabled' }
+        'tracepilot cache': [
+          { cls: 'dim',   t: 'cache savings · last 30 days' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'ok',    t: '$184      this week    covers Cursor seat bill' },
+          { cls: '',      t: '$156      4-week avg   compounding' },
+          { cls: 'ok',    t: '$1,840    YTD          since rollout' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'warn',  t: 'leak alert: org cache hit 68% → 61% (~$28/wk leaking)' },
+          { cls: 'dim',   t: 'fix: push prompt-caching to the 2 devs below 50% hit.' }
         ],
-        'tracepilot doctor': [
-          { cls: 'ok',    t: '✓ ~/.tracepilot/ exists' },
-          { cls: 'ok',    t: '✓ traces.db readable' },
-          { cls: 'ok',    t: '✓ no stale proxy state' },
-          { cls: 'ok',    t: '✓ all watchers reporting' },
-          { cls: '',     t: '' },
-          { cls: 'ok',    t: 'everything looks good.' }
+        'tracepilot $/ticket': [
+          { cls: 'dim',   t: 'spend per jira ticket · top 5' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: '',      t: 'CHESS-412  Pawn promotion regression      $48.20  3pt   $16.07' },
+          { cls: '',      t: 'NSCL-188   Battle socket reconnect        $44.10  5pt    $8.82' },
+          { cls: 'bad',   t: 'NSCL-201   Mission streak rework          $71.30  2pt   $35.65 ✗' },
+          { cls: '',      t: 'MAST-44    Mastery payment race           $22.40  3pt    $7.47' },
+          { cls: 'ok',    t: 'OTA-12     OTA phone-OTP login            $18.10  5pt    $3.62 ✓' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'warn',  t: 'NSCL-201 is 4× the median — worth a scope review.' }
         ],
-        'tracepilot proxy enable': [
-          { cls: 'dim',   t: '→ writing ~/.tracepilot/proxy.enabled' },
-          { cls: 'dim',   t: '→ installing CA to login keychain  (no sudo)' },
-          { cls: 'dim',   t: '→ enabling system proxy on every active service' },
-          { cls: 'dim',   t: '→ launchctl setenv HTTPS_PROXY=http://127.0.0.1:8443' },
-          { cls: 'dim',   t: '→ patching Cursor + VS Code settings' },
-          { cls: '',     t: '' },
-          { cls: 'ok',    t: '✓ proxy enabled on :8443' },
-          { cls: 'warn',  t: 'restart your AI apps to pick up the proxy.' }
+        'tracepilot anomaly': [
+          { cls: 'dim',   t: 'anomaly alerts · last 24h' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'bad',   t: 'spike      haricharan  $42.10 in 24h  · 4.1σ above 14d baseline' },
+          { cls: 'warn',  t: 'drift      org cache   68% → 61% over 7d  (~$28/wk leak)' },
+          { cls: 'warn',  t: 'off-hours  haricharan  47% of spend after 10pm  · burnout proxy' },
+          { cls: 'dim',   t: '─────────────────────────────────────────────' },
+          { cls: 'dim',   t: 'routed to akshay (manager) · cc gaurav on severity=spike' }
         ]
       };
 
@@ -2186,6 +2195,24 @@
           b.addEventListener('click', function () { runCommand(b.dataset.cmd); });
         });
         if (cliReset) cliReset.addEventListener('click', function () { if (!cliBusy) cliClear(); });
+
+        // auto-fire "tracepilot today" once on load to show value immediately
+        var autoFired = false;
+        function autoFire() {
+          if (autoFired) return;
+          autoFired = true;
+          setTimeout(function () { if (!cliBusy) runCommand('tracepilot today'); }, 900);
+        }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+              if (en.isIntersecting) { autoFire(); io.disconnect(); }
+            });
+          }, { threshold: 0.4 });
+          io.observe(cliBuffer);
+        } else {
+          autoFire();
+        }
       }
 
       // -------- cost calculator --------
