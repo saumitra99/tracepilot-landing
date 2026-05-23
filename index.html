@@ -2343,9 +2343,134 @@
       .badge { font-size: 10.5px; padding: 2px 7px; }
       .foot-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
     }
+
+    /* ---------- promo banner (LAUNCH10) ---------- */
+    .promo-banner {
+      position: relative;
+      z-index: 60;
+      background:
+        linear-gradient(90deg,
+          rgba(139,124,255,.22) 0%,
+          rgba(192,132,252,.18) 50%,
+          rgba(56,189,248,.20) 100%),
+        rgba(10,10,15,.85);
+      border-bottom: 1px solid rgba(139,124,255,.28);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13.5px;
+      color: var(--text);
+    }
+    .promo-banner[hidden] { display: none !important; }
+    html.promo-dismissed .promo-banner { display: none !important; }
+    .promo-banner-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: nowrap;
+    }
+    .promo-banner-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      line-height: 1.4;
+      min-width: 0;
+    }
+    .promo-banner-tag {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(139,124,255,.22);
+      border: 1px solid rgba(139,124,255,.4);
+      color: #d6d0ff;
+      white-space: nowrap;
+    }
+    .promo-banner-code {
+      appearance: none;
+      -webkit-appearance: none;
+      background: rgba(10,10,15,.55);
+      border: 1px solid rgba(139,124,255,.55);
+      color: #d6d0ff;
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .promo-banner-code:hover { background: rgba(139,124,255,.18); border-color: rgba(139,124,255,.75); }
+    .promo-banner-code:focus-visible { outline: 2px solid var(--accent-3); outline-offset: 2px; }
+    .promo-banner-code-status {
+      display: none;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 11.5px;
+      color: var(--good);
+      font-weight: 500;
+    }
+    .promo-banner-code.copied .promo-banner-code-status { display: inline; }
+    .promo-banner-close {
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: 0;
+      color: var(--text-soft);
+      font-size: 20px;
+      line-height: 1;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .promo-banner-close:hover { color: var(--text); background: rgba(255,255,255,.06); }
+    .promo-banner-close:focus-visible { outline: 2px solid var(--accent-3); outline-offset: 2px; }
+    @media (max-width: 640px) {
+      .promo-banner { font-size: 12.5px; }
+      .promo-banner-inner { padding: 8px 12px; gap: 10px; }
+      .promo-banner-tag { font-size: 10px; padding: 2px 7px; }
+      .promo-banner-code { font-size: 11.5px; padding: 2px 8px; }
+    }
+    @media (max-width: 380px) {
+      .promo-banner-inner { padding: 8px 10px; gap: 8px; }
+      .promo-banner-tag { display: none; }
+    }
   </style>
+  <script>
+    (function () {
+      try {
+        if (window.localStorage && localStorage.getItem('launch10-dismissed') === '1') {
+          document.documentElement.classList.add('promo-dismissed');
+        }
+      } catch (e) { /* private mode or disabled — banner just shows */ }
+    })();
+  </script>
 </head>
 <body data-hero="cards">
+
+  <div id="promo-banner" class="promo-banner" role="region" aria-label="Launch promotion">
+    <div class="promo-banner-inner">
+      <span class="promo-banner-text">
+        <span class="promo-banner-tag">Launch offer</span>
+        <span>10% off your first month on the Team plan — use code</span>
+        <button type="button" class="promo-banner-code" id="promo-banner-code" aria-label="Copy code LAUNCH10 to clipboard">
+          <span class="promo-banner-code-text">LAUNCH10</span>
+          <span class="promo-banner-code-status" aria-live="polite">Copied!</span>
+        </button>
+      </span>
+      <button type="button" class="promo-banner-close" id="promo-banner-close" aria-label="Dismiss promo banner">×</button>
+    </div>
+  </div>
+
   <div class="grid-bg" aria-hidden="true"></div>
   <div class="glow glow-1" aria-hidden="true"></div>
   <div class="glow glow-2" aria-hidden="true"></div>
@@ -3010,6 +3135,68 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
+    (function setupPromoBanner() {
+      var STORAGE_KEY = 'launch10-dismissed';
+      var banner = document.getElementById('promo-banner');
+      if (!banner) return;
+
+      var dismissed = false;
+      try {
+        if (window.localStorage && localStorage.getItem(STORAGE_KEY) === '1') dismissed = true;
+      } catch (e) { /* swallow — storage unavailable */ }
+
+      if (dismissed) {
+        banner.parentNode && banner.parentNode.removeChild(banner);
+        return;
+      }
+
+      var closeBtn = document.getElementById('promo-banner-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          banner.style.display = 'none';
+          try { window.localStorage && localStorage.setItem(STORAGE_KEY, '1'); }
+          catch (e) { /* swallow */ }
+        });
+      }
+
+      var codeBtn = document.getElementById('promo-banner-code');
+      if (codeBtn) {
+        var copyResetTimer;
+        var statusEl = codeBtn.querySelector('.promo-banner-code-status');
+        var markCopied = function () {
+          if (statusEl) statusEl.textContent = 'Copied!';
+          codeBtn.classList.add('copied');
+          clearTimeout(copyResetTimer);
+          copyResetTimer = setTimeout(function () { codeBtn.classList.remove('copied'); }, 1800);
+        };
+        var fallbackCopy = function () {
+          try {
+            var ta = document.createElement('textarea');
+            ta.value = 'LAUNCH10';
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'absolute';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            if (document.execCommand) document.execCommand('copy');
+            document.body.removeChild(ta);
+            markCopied();
+          } catch (err) { /* swallow — clipboard unavailable, click is silent */ }
+        };
+        codeBtn.addEventListener('click', function () {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText('LAUNCH10').then(markCopied, fallbackCopy);
+            } else {
+              fallbackCopy();
+            }
+          } catch (e) {
+            fallbackCopy();
+          }
+        });
+      }
+    })();
+
     (function () {
       // Set this to your form endpoint to enable real submissions.
       // Formspree: 'https://formspree.io/f/xxxxxxx'
