@@ -2344,7 +2344,7 @@
       .foot-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
     }
 
-    /* ---------- promo banner (LAUNCH10) ---------- */
+    /* ---------- promo banner (BETA50) ---------- */
     .promo-banner {
       position: relative;
       z-index: 60;
@@ -2448,7 +2448,7 @@
   <script>
     (function () {
       try {
-        if (window.localStorage && localStorage.getItem('launch10-dismissed') === '1') {
+        if (window.localStorage && localStorage.getItem('beta50-dismissed') === '1') {
           document.documentElement.classList.add('promo-dismissed');
         }
       } catch (e) { /* private mode or disabled — banner just shows */ }
@@ -2460,10 +2460,10 @@
   <div id="promo-banner" class="promo-banner" role="region" aria-label="Launch promotion">
     <div class="promo-banner-inner">
       <span class="promo-banner-text">
-        <span class="promo-banner-tag">Launch offer</span>
-        <span>10% off your first month on the Team plan — use code</span>
-        <button type="button" class="promo-banner-code" id="promo-banner-code" aria-label="Copy code LAUNCH10 to clipboard">
-          <span class="promo-banner-code-text">LAUNCH10</span>
+        <span class="promo-banner-tag">Beta offer</span>
+        <span>50% off your first month on the Team plan — use code</span>
+        <button type="button" class="promo-banner-code" id="promo-banner-code" aria-label="Copy code BETA50 to clipboard">
+          <span class="promo-banner-code-text">BETA50</span>
           <span class="promo-banner-code-status" aria-live="polite">Copied!</span>
         </button>
       </span>
@@ -3136,7 +3136,7 @@
 
   <script>
     (function setupPromoBanner() {
-      var STORAGE_KEY = 'launch10-dismissed';
+      var STORAGE_KEY = 'beta50-dismissed';
       var banner = document.getElementById('promo-banner');
       if (!banner) return;
 
@@ -3172,7 +3172,7 @@
         var fallbackCopy = function () {
           try {
             var ta = document.createElement('textarea');
-            ta.value = 'LAUNCH10';
+            ta.value = 'BETA50';
             ta.setAttribute('readonly', '');
             ta.style.position = 'absolute';
             ta.style.left = '-9999px';
@@ -3186,7 +3186,7 @@
         codeBtn.addEventListener('click', function () {
           try {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText('LAUNCH10').then(markCopied, fallbackCopy);
+              navigator.clipboard.writeText('BETA50').then(markCopied, fallbackCopy);
             } else {
               fallbackCopy();
             }
